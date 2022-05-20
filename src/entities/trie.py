@@ -75,7 +75,7 @@ class Trie:
                 return False
 
         return node.is_valid_end
-    
+
     def get_all(self):
         """Returns all keys in the trie
 

@@ -63,4 +63,3 @@ class TestTrie(unittest.TestCase):
         
         word = self.trie.find("bar")
         self.assertEqual(word, False)
-    

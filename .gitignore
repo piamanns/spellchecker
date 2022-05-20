@@ -2,3 +2,4 @@
 .pytest_cache
 __pycache__
 htmlcov
+data/wordlist_test.txt
