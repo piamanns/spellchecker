@@ -4,4 +4,40 @@ A Python spelling checker and corrector. A course assignment for the Data Struct
 
 ## Weekly progress reports
 - [Week 1](/documentation/weekly_report_1.md)
+- [Week 2](/documentation/weekly_report_2.md)
 
+## Install and run
+
+1. Install dependencies:
+
+```bash
+poetry install
+```
+
+2. Start the app:
+
+```bash
+poetry run invoke start
+````
+
+## Other commands:
+
+### Run tests:
+
+```bash
+poetry run invoke test
+```
+
+### Generate test coverage report:
+
+Report is created in htmlcov/index.html in the root directory.
+
+```bash
+poetry run invoke coverage-report
+```
+
+### Check code quality with pylint:
+
+```bash
+poetry run invoke lint
+```

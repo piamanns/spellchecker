@@ -12,10 +12,9 @@ class WordlistRepository:
     def add(self, word: str):
         self._write(word)
         return word
-    
+
     def delete_all(self):
-        with open(self._file_path, "w", encoding="utf-8") as file:
-            pass
+        open(self._file_path, "w", encoding="utf-8").close()
 
     def _check_for_file(self):
         Path(self._file_path).touch()

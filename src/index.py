@@ -29,9 +29,9 @@ def main():
             if dictionary.find(word):
                 print(f"\n{word} is already in the dictionary.")
             else:
-              dictionary.add(word)
-              added = wordlist_repository.add(word)
-              print(f"\n\"{added}\" was added.")
+                dictionary.add(word)
+                added = wordlist_repository.add(word)
+                print(f"\n\"{added}\" was added.")
         if command == 2:
             word = input("Type word to search for: ")
             result = dictionary.find(word)
