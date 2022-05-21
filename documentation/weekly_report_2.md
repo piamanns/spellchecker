@@ -13,4 +13,6 @@ Furthermore, the length of the child node list is constant for every node in the
 I am contemplating different options for allowing for a more flexible alphabet. 
 Some Python spelling checker implementations seem to utilize a dict for storing the child nodes. The flexibility of the dict comes with the cost of a potential increase in time complexity, however (https://wiki.python.org/moin/TimeComplexity).
 
+Next I will start work on the algorithm for calculating Damerau–Levenshtein distances.
+
 Time used: 11 h
