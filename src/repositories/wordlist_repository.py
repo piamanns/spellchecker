@@ -14,7 +14,8 @@ class WordlistRepository:
         return word
 
     def delete_all(self):
-        open(self._file_path, "w", encoding="utf-8").close()
+        with open(self._file_path, "w", encoding="utf-8") as file:
+            file.close()
 
     def _check_for_file(self):
         Path(self._file_path).touch()

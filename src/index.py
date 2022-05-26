@@ -1,51 +1,52 @@
-from entities.trie import Trie
-from repositories.wordlist_repository import wordlist_repository
+from services.spellchecker_service import spellchecker_service
 
 def show_commands():
     print()
-    print("0 - Load wordlist")
     print("1 - Add a word to the dictionary")
     print("2 - Search for a word in the dictionary")
     print("3 - Print dictionary")
-    print("4 - Quit")
+    print("4 - Calculate Damerau-Levensthein distance")
+    print("5 - Check spelling")
+    print("99 - Quit")
     print()
 
-def main():
-    dictionary = Trie()
-    wordlist = []
 
+def main():
     while True:
         show_commands()
         try:
             command = int(input("Choose a command: "))
         except ValueError:
             continue
-        if command == 0:
-            wordlist = wordlist_repository.get_wordlist()
-            for word in wordlist:
-                dictionary.add(word)
+
         if command == 1:
             word = input("Type a word: ")
-            if dictionary.find(word):
-                print(f"\n{word} is already in the dictionary.")
+            if spellchecker_service.add_word(word):
+                print(f"\n\"{word}\" was added.")
             else:
-                dictionary.add(word)
-                added = wordlist_repository.add(word)
-                print(f"\n\"{added}\" was added.")
+                print(f"\n{word} is already in the dictionary.")
         if command == 2:
             word = input("Type word to search for: ")
-            result = dictionary.find(word)
-            if result:
+            if spellchecker_service.find_word(word):
                 print(f"\nFound \"{word}\" in the dictionary!")
             else:
                 print("\nNo such word in the dictionary.")
         if command == 3:
-            words = dictionary.get_all()
+            words = spellchecker_service.get_all()
             print("\n** Words in the dictionary: **")
             for word in words:
                 print(word)
             print()
         if command == 4:
+            word_a = input("Type first word: ")
+            word_b = input("Type second word: ")
+            dist = spellchecker_service.calculate_distance(word_a, word_b)
+            print(f"\nThe Demerau-Levenshtein distance between the words is {dist}.")
+        if command == 5:
+            word = input("Type word to be spell checked: ")
+            print(spellchecker_service.find_closest_match(word))
+
+        if command == 99:
             break
 
 
