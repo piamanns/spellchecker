@@ -1,4 +1,4 @@
-CHAR_COUNT = 26
+from services.alphabet_utils import CHAR_COUNT
 
 
 class Node:

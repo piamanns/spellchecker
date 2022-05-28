@@ -44,7 +44,11 @@ def main():
             print(f"\nThe Demerau-Levenshtein distance between the words is {dist}.")
         if command == 5:
             word = input("Type word to be spell checked: ")
-            print(spellchecker_service.find_closest_match(word))
+            result = spellchecker_service.find_closest_match(word)
+            if result[0] == word:
+                print("The word is correctly spelled.")
+            else:
+                print(f"Did you mean {', ' .join(result)}?")
 
         if command == 99:
             break

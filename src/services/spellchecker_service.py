@@ -59,26 +59,25 @@ class SpellcheckerService:
             word: The word to be matched.
 
         Returns:
-            A string describing the result of the search. If the
-            given word was not found in the dictionary a list of
-            candidate words with the lowest Damerau-Lewenshtein distance
-            is included.
+            A list of candidate words with the lowest Damerau-Lewenshtein
+            distance to the given word. If the word itself was found in the
+            dictionary (i.e. was correctly spelled) the list contains
+            only the word itself.
         """
 
         if self.find_word(word):
-            return "The word is spelled correctly."
-        suggestions = []
+            return [word]
+        candidates = []
         wordlist = self.get_all()
         min_dist = max(len(word), len(wordlist[0]))
         for dict_word in wordlist:
             dl_dist = calculate_dl_distance(word, dict_word)
             if dl_dist <= min_dist:
                 if dl_dist < min_dist:
-                    suggestions.clear()
+                    candidates.clear()
                     min_dist = dl_dist
-                suggestions.append(f"{dict_word}({dl_dist})")
-        result = ", ".join(suggestions)
-        return f"Did you mean {result}?"
+                candidates.append(f"{dict_word}({dl_dist})")
+        return candidates
 
     def get_all(self):
         """ Returns all words in the dictionary as a list.

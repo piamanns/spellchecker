@@ -5,6 +5,7 @@
     https://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance,
     excellently explained by James M. Jensen II
     in https://www.lemoda.net/text-fuzzy/damerau-levenshtein/
+
     (Original blogpost available at
     https://web.archive.org/web/20180814145642/
     https://scarcitycomputing.blogspot.com/2013/04/damerau-levenshtein-edit-distance.html)
@@ -136,10 +137,3 @@ def print_matrix(matrix):
         for col in range(cols):
             print(f"{matrix[row][col]:2} | ", end="")
         print()
-
-
-if __name__ == "__main__":
-    print(calculate_dl_distance("the", "teh")) # 1
-    #print(calculate_dl_distance("car", "carbon")) # 3
-    #print(calculate_dl_distance("hat", "tah")) # 2
-    #print(calculate_dl_distance("baa", "ba")) # 1
