@@ -1,6 +1,7 @@
 from entities.trie import Trie
 from repositories.wordlist_repository import wordlist_repository
 from services.distance_service import calculate_dl_distance
+from services.distance_service_recursive import calculate_dl_distance_recursive
 
 
 class SpellcheckerService:
@@ -78,6 +79,9 @@ class SpellcheckerService:
                     min_dist = dl_dist
                 candidates.append(f"{dict_word}({dl_dist})")
         return candidates
+
+    def find_closest_match_recursively(self, word: str):
+        calculate_dl_distance_recursive(word, self._dictionary)
 
     def get_all(self):
         """ Returns all words in the dictionary as a list.

@@ -7,6 +7,7 @@ def show_commands():
     print("3 - Print dictionary")
     print("4 - Calculate Damerau-Levensthein distance")
     print("5 - Check spelling")
+    print("6 - Check spelling, recursive")
     print("99 - Quit")
     print()
 
@@ -49,7 +50,9 @@ def main():
                 print("The word is correctly spelled.")
             else:
                 print(f"Did you mean {', ' .join(result)}?")
-
+        if command == 6:
+            word = input("Type word to be spell checked: ")
+            spellchecker_service.find_closest_match_recursively(word)
         if command == 99:
             break
 
