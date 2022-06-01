@@ -11,18 +11,18 @@ def calculate_dl_distance_recursive(word_target: str, trie):
     candidates = {}
     big_cost = trie.get_max_keylength()
 
-    for i in range(len(first_char_nodes)):
-        if first_char_nodes[i]:
+    for i, node in enumerate(first_char_nodes):
+        if node:
             rows_per_char = [1] * CHAR_COUNT
             matrix = [[big_cost for j in range (len(word_target) + 2)]]
             matrix += [[big_cost] + list(range(len(word_target) + 1))]
             letter = calc_char(i)
 
             calculate(
-                first_char_nodes[i], letter, "", word_target,
+                node, letter, "", word_target,
                 1, matrix, rows_per_char, big_cost, candidates
             )
-    
+
     for i in range(big_cost):
         if i in candidates:
             print(f"{i}: {candidates[i]}")
@@ -51,7 +51,9 @@ def calculate(node, char_source, word_source, word_target,
         else:
             cost = 1
 
-        smallest_cost = calculate_min(matrix, curr_row, prev_row_idx, col, cost, row_w_match, col_w_match)
+        smallest_cost = calculate_min(matrix, curr_row, prev_row_idx,
+                                      col, cost,
+                                      row_w_match, col_w_match)
         curr_row.append(smallest_cost)
 
     matrix.append(curr_row)
@@ -65,12 +67,12 @@ def calculate(node, char_source, word_source, word_target,
             candidates[dl_distance] = []
         candidates[dl_distance].append(f"{word_source+char_source} ({curr_row[-1]})")
 
-    for i in range(len(node.children)):
-        if node.children[i]:
-            calculate(node.children[i], calc_char(i), word_source+char_source, word_target,
+    for i, child in enumerate(node.children):
+        if child:
+            calculate(child, calc_char(i), word_source+char_source, word_target,
                 prev_row_idx+1, matrix, rows_per_char, big_cost, candidates
             )
-    
+
     rows_per_char[calc_index(char_source)] = tmp
     matrix.pop()
 

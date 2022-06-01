@@ -28,7 +28,7 @@ class Trie:
             self._max_keylength = len(key)
 
         node = self._root
-   
+
         for char in key.lower():
             index = calc_index(char)
             if not node.children[index]:
@@ -37,7 +37,7 @@ class Trie:
             node = node.children[index]
 
         node.is_valid_end = True
-  
+
     def find(self, key: str):
         """Searches for the given key in the trie
 
@@ -69,11 +69,23 @@ class Trie:
         keys = []
         self._traverse(self._root, "", keys)
         return keys
-    
+
     def get_root(self):
+        """Returns the root node of the trie.
+
+        Returns:
+            The root node as a Node-object.
+        """
+
         return self._root
-    
+
     def get_max_keylength(self):
+        """Returns the length of the longest key in the trie.
+
+        Returns:
+            The length of the longest key as an integer.
+        """
+
         return self._max_keylength
 
     def _traverse(self, node, key: str, result: list):

@@ -53,8 +53,21 @@ class SpellcheckerService:
 
         return self._dictionary.find(word)
 
+    def calculate_distance(self, word_a: str, word_b: str):
+        """ Calculates the Damerau-Lewenshtein distance between two words.
+
+        Args:
+            word_a: The source word as a string.
+            word_b: The target word as a string,
+
+        Returns:
+            The Damerau-Lewnshtein distance as an integer.
+        """
+
+        return calculate_dl_distance(word_a, word_b)
+
     def find_closest_match(self, word:str):
-        """ Find closest match in the dictionary for the given word.
+        """ Finds closest matching words in the dictionary for the given word.
 
         Args:
             word: The word to be matched.
@@ -81,6 +94,15 @@ class SpellcheckerService:
         return candidates
 
     def find_closest_match_recursively(self, word: str):
+        """ Finds closest matching words in the dictionary for the given word.
+
+        The search utilizes a recursive traversal of the trie for
+        faster perfomance.
+
+        Args:
+            word: The word to be matched.
+        """
+
         calculate_dl_distance_recursive(word, self._dictionary)
 
     def get_all(self):
@@ -98,9 +120,6 @@ class SpellcheckerService:
 
         self._dictionary = Trie()
         wordlist_repository.delete_all()
-
-    def calculate_distance(self, word_a: str, word_b: str):
-        return calculate_dl_distance(word_a, word_b)
 
 
 spellchecker_service = SpellcheckerService()
