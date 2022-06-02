@@ -49,7 +49,7 @@ class TestSpellcheckerService(unittest.TestCase):
         self.assertEqual(len(wordlist), 3)
         self.assertListEqual(wordlist, wordlist_content)
     
-    def test_finding_closest_match_for_misspelled_word_works_as_expected(self):
+    def test_baseline_finding_closest_match_for_misspelled_word_works_as_expected(self):
         self.sp_service.add_word("art")
         self.sp_service.add_word("car")
         self.sp_service.add_word("carbon")
@@ -58,8 +58,11 @@ class TestSpellcheckerService(unittest.TestCase):
 
         result = self.sp_service.find_closest_match("vaule")
         self.assertListEqual(result, ["value(1)"])
-    
-    def test_finding_closest_match_for_correctly_spelled_word_works_as_expected(self):
+
+        result = self.sp_service.find_closest_match("crabone")
+        self.assertListEqual(result, ["carbon(2)"])
+
+    def test_baseline_finding_closest_match_for_correctly_spelled_word_works_as_expected(self):
         self.sp_service.add_word("art")
         self.sp_service.add_word("car")
         self.sp_service.add_word("carbon")
@@ -69,6 +72,53 @@ class TestSpellcheckerService(unittest.TestCase):
         result = self.sp_service.find_closest_match("car")
         self.assertListEqual(result, ["car"])
     
+    def test_baseline_capping_edit_distance_for_matches_works_correctly(self):
+        self.sp_service.add_word("artist")
+        self.sp_service.add_word("carbon")
+        self.sp_service.add_word("passport")
+        self.sp_service.add_word("valuable")
+
+        result = self.sp_service.find_closest_match("carb")
+        self.assertEqual(result, ["carbon(2)"])
+
+        result = self.sp_service.find_closest_match("car", 2)
+        self.assertEqual(len(result), 0)
+    
+    def test_recursive_search_for_closest_match_for_misspelled_word_works_as_expected(self):
+        self.sp_service.add_word("art")
+        self.sp_service.add_word("car")
+        self.sp_service.add_word("carbon")
+        self.sp_service.add_word("pass")
+        self.sp_service.add_word("value")
+
+        result = self.sp_service.find_closest_match_recursively("vaule")
+        self.assertListEqual(result, ["value(1)"])
+
+        result = self.sp_service.find_closest_match("crabone")
+        self.assertListEqual(result, ["carbon(2)"])
+    
+    def test_recursive_search_for_closest_match_for_correctly_spelled_word_works_as_expected(self):
+        self.sp_service.add_word("art")
+        self.sp_service.add_word("car")
+        self.sp_service.add_word("carbon")
+        self.sp_service.add_word("pass")
+        self.sp_service.add_word("value")
+
+        result = self.sp_service.find_closest_match_recursively("car")
+        self.assertListEqual(result, ["car"])
+
+    def test_recursive_search_capping_edit_distance_works_correctly(self):
+        self.sp_service.add_word("artist")
+        self.sp_service.add_word("carbon")
+        self.sp_service.add_word("passport")
+        self.sp_service.add_word("valuable")
+
+        result = self.sp_service.find_closest_match("carb")
+        self.assertEqual(result, ["carbon(2)"])
+
+        result = self.sp_service.find_closest_match("car", 2)
+        self.assertEqual(len(result), 0)
+
     def test_calculating_damerau_lewenshtein_distance_returns_correct_value(self):
         result = self.sp_service.calculate_distance("glamourous", "glamorous")
         self.assertEqual(result, 1)

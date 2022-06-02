@@ -56,3 +56,4 @@ class TestDistanceService(unittest.TestCase):
         self.assertListEqual(col_0, [7, 7, 7, 7, 7])
         self.assertListEqual(col_1, [7, 0, 1, 2, 3])
         self.assertListEqual(col_2, [7, 1, 0, 0, 0])
+ 
