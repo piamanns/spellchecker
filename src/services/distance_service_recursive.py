@@ -65,7 +65,7 @@ def calculate(node, char_source, word_source, word_target,
         candidates[dl_distance].append(f"{word_source+char_source}({curr_row[-1]})")
 
     for i, child in enumerate(node.children):
-        if child and not (max_edit and curr_row[-1] >= max_edit):
+        if child and not (max_edit and min(curr_row) > max_edit):
             calculate(child, calc_char(i), word_source+char_source, word_target,
                 prev_row_idx+1, matrix, rows_per_char,
                 max_edit, big_cost, candidates
