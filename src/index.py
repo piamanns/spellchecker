@@ -6,9 +6,9 @@ def show_commands():
     print("2 - Search for a word in the dictionary")
     print("3 - Print dictionary")
     print("4 - Calculate Damerau-Levensthein distance")
-    print("5 - Check spelling")
-    print("6 - Check spelling, recursive")
-    print("99 - Quit")
+    print("5 - Check spelling (for-loop)")
+    print("6 - Check spelling (recursive)")
+    print("0 - Quit")
     print()
 
 
@@ -43,17 +43,30 @@ def main():
             word_b = input("Type second word: ")
             dist = spellchecker_service.calculate_distance(word_a, word_b)
             print(f"\nThe Demerau-Levenshtein distance between the words is {dist}.")
-        if command == 5:
+        if command in [5, 6]:
             word = input("Type word to be spell checked: ")
-            result = spellchecker_service.find_closest_match(word)
+            try:
+                max_edit = int(input(
+                    "Enter maximum edit distance (leave empty for unrestricted): "
+                ))
+            except ValueError:
+                max_edit = None
+            result = []
+            if command == 5:
+                result = spellchecker_service.find_closest_match(word, max_edit)
+            else:
+                result = spellchecker_service.find_closest_match_recursively(
+                    word,
+                    max_edit
+                )
+
             if result[0] == word:
                 print("The word is correctly spelled.")
             else:
                 print(f"Did you mean {', ' .join(result)}?")
-        if command == 6:
-            word = input("Type word to be spell checked: ")
-            spellchecker_service.find_closest_match_recursively(word)
-        if command == 99:
+                print(spellchecker_service.get_info())
+
+        if command == 0:
             break
 
 

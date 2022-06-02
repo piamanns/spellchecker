@@ -4,9 +4,7 @@ from services.alphabet_utils import(
     calc_char
 )
 
-from services.distance_service import print_matrix
-
-def calculate_dl_distance_recursive(word_target: str, trie):
+def calculate_dl_distance_recursive(word_target: str, trie, max_edit: int):
     first_char_nodes = trie.get_root().children
     candidates = {}
     big_cost = trie.get_max_keylength()
@@ -20,17 +18,17 @@ def calculate_dl_distance_recursive(word_target: str, trie):
 
             calculate(
                 node, letter, "", word_target,
-                1, matrix, rows_per_char, big_cost, candidates
+                1, matrix, rows_per_char, max_edit,
+                big_cost, candidates
             )
 
     for i in range(big_cost):
         if i in candidates:
-            print(f"{i}: {candidates[i]}")
-            break
-
+            return candidates[i]
+    return []
 
 def calculate(node, char_source, word_source, word_target,
-              prev_row_idx, matrix, rows_per_char,
+              prev_row_idx, matrix, rows_per_char, max_edit,
               big_cost, candidates):
 
     cols = len(word_target) + 2
@@ -52,12 +50,11 @@ def calculate(node, char_source, word_source, word_target,
             cost = 1
 
         smallest_cost = calculate_min(matrix, curr_row, prev_row_idx,
-                                      col, cost,
-                                      row_w_match, col_w_match)
+                                      col, cost, row_w_match,
+                                      col_w_match)
         curr_row.append(smallest_cost)
 
     matrix.append(curr_row)
-    #print_matrix(matrix)
     tmp = rows_per_char[calc_index(char_source)]
     rows_per_char[calc_index(char_source)] = prev_row_idx + 1
 
@@ -65,12 +62,13 @@ def calculate(node, char_source, word_source, word_target,
         dl_distance = curr_row[-1]
         if dl_distance not in candidates:
             candidates[dl_distance] = []
-        candidates[dl_distance].append(f"{word_source+char_source} ({curr_row[-1]})")
+        candidates[dl_distance].append(f"{word_source+char_source}({curr_row[-1]})")
 
     for i, child in enumerate(node.children):
-        if child:
+        if child and not (max_edit and curr_row[-1] >= max_edit):
             calculate(child, calc_char(i), word_source+char_source, word_target,
-                prev_row_idx+1, matrix, rows_per_char, big_cost, candidates
+                prev_row_idx+1, matrix, rows_per_char,
+                max_edit, big_cost, candidates
             )
 
     rows_per_char[calc_index(char_source)] = tmp

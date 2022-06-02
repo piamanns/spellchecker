@@ -79,6 +79,16 @@ class Trie:
 
         return self._root
 
+    def get_size(self):
+        """ Returns the number of keys in the trie.
+
+        Returns:
+            The key count as an integer.
+        """
+
+        count = self._count(self._root)
+        return count
+
     def get_max_keylength(self):
         """Returns the length of the longest key in the trie.
 
@@ -95,3 +105,12 @@ class Trie:
             child = node.children[i]
             if child:
                 self._traverse(child, key+calc_char(i), result)
+
+    def _count(self, node):
+        count = 0
+        if node.is_valid_end:
+            count += 1
+        for i in range(CHAR_COUNT):
+            if node.children[i]:
+                count += self._count(node.children[i])
+        return count

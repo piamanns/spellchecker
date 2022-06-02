@@ -1,3 +1,4 @@
+from time import perf_counter
 from entities.trie import Trie
 from repositories.wordlist_repository import wordlist_repository
 from services.distance_service import calculate_dl_distance
@@ -12,7 +13,8 @@ class SpellcheckerService:
         """ The class constructor.
         """
         self._dictionary = Trie()
-        self._wordlist = []
+        self._latest_search_time = 0
+        self._max_edit = None
         self.load_wordlist()
 
     def load_wordlist(self):
@@ -66,7 +68,7 @@ class SpellcheckerService:
 
         return calculate_dl_distance(word_a, word_b)
 
-    def find_closest_match(self, word:str):
+    def find_closest_match(self, word:str, max_edit=None):
         """ Finds closest matching words in the dictionary for the given word.
 
         Args:
@@ -78,22 +80,33 @@ class SpellcheckerService:
             dictionary (i.e. was correctly spelled) the list contains
             only the word itself.
         """
+        if max_edit:
+            self._max_edit = max_edit
 
         if self.find_word(word):
             return [word]
+
+        start = perf_counter()
+
         candidates = []
         wordlist = self.get_all()
         min_dist = max(len(word), len(wordlist[0]))
         for dict_word in wordlist:
+            if max_edit and abs(len(word)-len(dict_word)) > max_edit:
+                continue
             dl_dist = calculate_dl_distance(word, dict_word)
             if dl_dist <= min_dist:
                 if dl_dist < min_dist:
                     candidates.clear()
                     min_dist = dl_dist
                 candidates.append(f"{dict_word}({dl_dist})")
+
+        end = perf_counter()
+        self._latest_search_time = end-start
+
         return candidates
 
-    def find_closest_match_recursively(self, word: str):
+    def find_closest_match_recursively(self, word: str, max_edit=None):
         """ Finds closest matching words in the dictionary for the given word.
 
         The search utilizes a recursive traversal of the trie for
@@ -101,9 +114,26 @@ class SpellcheckerService:
 
         Args:
             word: The word to be matched.
+
+        Returns:
+            Returns:
+            A list of candidate words with the lowest Damerau-Lewenshtein
+            distance to the given word. If the word itself was found in the
+            dictionary (i.e. was correctly spelled) the list contains
+            only the word itself.
         """
 
-        calculate_dl_distance_recursive(word, self._dictionary)
+        if self.find_word(word):
+            return [word]
+
+        start = perf_counter()
+
+        candidates = calculate_dl_distance_recursive(word, self._dictionary, max_edit)
+
+        end = perf_counter()
+        self._latest_search_time = end-start
+
+        return candidates
 
     def get_all(self):
         """ Returns all words in the dictionary as a list.
@@ -121,5 +151,21 @@ class SpellcheckerService:
         self._dictionary = Trie()
         wordlist_repository.delete_all()
 
+    def get_info(self):
+        """ Returns information about the setup and performance
+        of the spellchecker.
+
+        Returns:
+          A string containing
+          - the time used for the latest search in the dictionary
+          for correctly spelled words with a low edit distance
+          to the given word
+          -  the size of the dictionary (number of words)
+        """
+
+        return (
+            f"\nSearch took {self._latest_search_time} seconds."
+            + f"\n({self._dictionary.get_size()} words in dictionary.)\n"
+        )
 
 spellchecker_service = SpellcheckerService()
