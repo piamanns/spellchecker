@@ -56,4 +56,29 @@ class TestDistanceService(unittest.TestCase):
         self.assertListEqual(col_0, [7, 7, 7, 7, 7])
         self.assertListEqual(col_1, [7, 0, 1, 2, 3])
         self.assertListEqual(col_2, [7, 1, 0, 0, 0])
- 
+
+    def test_matrix_is_returned_when_debug_flag_set_to_True(self):
+        word_source = "craton"
+        word_target = "cartoon"
+        dl_distance = calculate_dl_distance(word_source, word_target)
+        matrix = calculate_dl_distance(word_source, word_target, True)
+        self.assertEqual(len(matrix), len(word_source) + 2)
+        self.assertEqual(len(matrix[0]), len(word_target) + 2)
+        self.assertEqual(matrix[-1][-1], dl_distance)
+
+    def test_matrix_content_is_calculated_correctly(self):
+        word_source = "zbar"
+        word_target = "zebra"
+        matrix = calculate_dl_distance(word_source, word_target, True)
+        rows = []
+        cols = len(word_target) + 2
+        max_cost = len(word_source) + len(word_target)
+        rows.append([max_cost for i in range(cols)])
+        rows.append([max_cost] + list(range(len(word_target)+1)))
+        rows.append([max_cost, 1, 0, 1, 2, 3, 4])
+        rows.append([max_cost, 2, 1, 1, 1, 2, 3])
+        rows.append([max_cost, 3, 2, 2, 2, 2, 2])
+        rows.append([max_cost, 4, 3, 3, 3, 2, 2])
+
+        for i, row in enumerate(rows):
+            self.assertListEqual(matrix[i], row)

@@ -17,13 +17,18 @@ from services.alphabet_utils import(
 )
 
 
-def calculate_dl_distance(word_a: str, word_b:str):
+def calculate_dl_distance(word_a: str, word_b:str, debug_flag=False):
     """Calculates the Damerau-Levensthein distance between two words.
 
     Args:
         word_a: The source word as a string.
         word_b: The target word as a string.
-
+        debug_flag: A boolean describing whether the matrix
+                    resulting from the calculation should be
+                    returned in its entirety (instead of
+                    only the last cell containing the
+                    final Damerau-Levenshtein distance).
+                    Defaults to False.
     Returns:
         An integer describing the edit distance between the two words.
         Minimum value is 0, maximum the length of the longer word.
@@ -64,7 +69,8 @@ def calculate_dl_distance(word_a: str, word_b:str):
 
         rows_per_char[calc_index(char_a)] = row
 
-    #print_matrix(matrix)
+    if debug_flag:
+        return matrix
     return matrix[-1][-1]
 
 def calculate_min(matrix, row, col, cost, row_w_match, col_w_match):
@@ -122,18 +128,3 @@ def init_matrix(rows: int, cols: int, maxdist: int):
         mtx[0][j] = maxdist
         mtx[1][j] = j - 1
     return mtx
-
-def print_matrix(matrix):
-    """ Debugging function for printing out the matrix.
-
-    Args:
-        matrix: The matrix to be printed.
-    """
-
-    print()
-    rows = len(matrix)
-    cols = len(matrix[0])
-    for row in range(rows):
-        for col in range(cols):
-            print(f"{matrix[row][col]:2} | ", end="")
-        print()

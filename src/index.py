@@ -1,4 +1,8 @@
+""" Module for the command line user interface.
+"""
+
 from services.spellchecker_service import spellchecker_service
+
 
 def show_commands():
     print()
@@ -6,11 +10,70 @@ def show_commands():
     print("2 - Search for a word in the dictionary")
     print("3 - Print dictionary")
     print("4 - Calculate Damerau-Levensthein distance")
-    print("5 - Check spelling (for-loop)")
+    print("5 - Check spelling (baseline for-loop)")
     print("6 - Check spelling (recursive)")
     print("0 - Quit")
     print()
 
+def add_word():
+    word = input("Type a word: ")
+    if spellchecker_service.add_word(word):
+        print(f"\n\"{word}\" was added.")
+    else:
+        print(f"\n{word} is already in the dictionary.")
+
+def find_word():
+    word = input("Type word to search for: ")
+    if spellchecker_service.find_word(word):
+        print(f"\nFound \"{word}\" in the dictionary!")
+    else:
+        print("\nNo such word in the dictionary.")
+
+def get_all():
+    words = spellchecker_service.get_all()
+    print("\n*** Words in the dictionary: ***")
+    for word in words:
+        print(word)
+    print()
+
+def calculate_distance():
+    word_a = input("Type first word: ")
+    word_b = input("Type second word: ")
+    matrix = spellchecker_service.calculate_distance(word_a, word_b, True)
+    print_matrix(matrix)
+    print(f"\nThe Demerau-Levenshtein distance between the words is {matrix[-1][-1]}.")
+
+def check_spelling(recursive=False):
+    word = input("Type word to be spell checked: ")
+    try:
+        max_edit = int(input(
+            "Enter maximum edit distance (empty for unrestricted): "
+        ))
+    except ValueError:
+        max_edit = None
+
+    result = []
+    if recursive:
+        result = spellchecker_service.find_closest_match_recursively(
+                 word, max_edit
+        )
+    else:
+        result = spellchecker_service.find_closest_match(word, max_edit)
+
+    if result[0] == word:
+        print("The word is correctly spelled.")
+    else:
+        print(f"Did you mean {', ' .join(result)}?")
+        print(spellchecker_service.get_info())
+
+def print_matrix(matrix):
+    print()
+    rows = len(matrix)
+    cols = len(matrix[0])
+    for row in range(rows):
+        for col in range(cols):
+            print(f"{matrix[row][col]:2} | ", end="")
+        print()
 
 def main():
     while True:
@@ -18,54 +81,21 @@ def main():
         try:
             command = int(input("Choose a command: "))
         except ValueError:
+            print("No such command.\nTry again!")
             continue
 
         if command == 1:
-            word = input("Type a word: ")
-            if spellchecker_service.add_word(word):
-                print(f"\n\"{word}\" was added.")
-            else:
-                print(f"\n{word} is already in the dictionary.")
+            add_word()
         if command == 2:
-            word = input("Type word to search for: ")
-            if spellchecker_service.find_word(word):
-                print(f"\nFound \"{word}\" in the dictionary!")
-            else:
-                print("\nNo such word in the dictionary.")
+            find_word()
         if command == 3:
-            words = spellchecker_service.get_all()
-            print("\n** Words in the dictionary: **")
-            for word in words:
-                print(word)
-            print()
+            get_all()
         if command == 4:
-            word_a = input("Type first word: ")
-            word_b = input("Type second word: ")
-            dist = spellchecker_service.calculate_distance(word_a, word_b)
-            print(f"\nThe Demerau-Levenshtein distance between the words is {dist}.")
-        if command in [5, 6]:
-            word = input("Type word to be spell checked: ")
-            try:
-                max_edit = int(input(
-                    "Enter maximum edit distance (leave empty for unrestricted): "
-                ))
-            except ValueError:
-                max_edit = None
-            result = []
-            if command == 5:
-                result = spellchecker_service.find_closest_match(word, max_edit)
-            else:
-                result = spellchecker_service.find_closest_match_recursively(
-                    word,
-                    max_edit
-                )
-
-            if result[0] == word:
-                print("The word is correctly spelled.")
-            else:
-                print(f"Did you mean {', ' .join(result)}?")
-                print(spellchecker_service.get_info())
-
+            calculate_distance()
+        if command == 5:
+            check_spelling(False)
+        if command == 6:
+            check_spelling(True)
         if command == 0:
             break
 

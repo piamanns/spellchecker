@@ -55,24 +55,29 @@ class SpellcheckerService:
 
         return self._dictionary.find(word)
 
-    def calculate_distance(self, word_a: str, word_b: str):
+    def calculate_distance(self, word_a: str, word_b: str, debug_flag=False):
         """ Calculates the Damerau-Lewenshtein distance between two words.
 
         Args:
             word_a: The source word as a string.
-            word_b: The target word as a string,
+            word_b: The target word as a string.
+            debug_flag: A boolean describing whether the matrix
+                        resulting from the calculation should be
+                        returned in its entirety. Defaults to False.
 
         Returns:
             The Damerau-Lewnshtein distance as an integer.
         """
 
-        return calculate_dl_distance(word_a, word_b)
+        return calculate_dl_distance(word_a, word_b, debug_flag)
 
     def find_closest_match(self, word:str, max_edit=None):
         """ Finds closest matching words in the dictionary for the given word.
 
         Args:
             word: The word to be matched.
+            max_edit: An integer describing the maximum edit distance
+                      allowed. Defaults to None.
 
         Returns:
             A list of candidate words with the lowest Damerau-Lewenshtein
@@ -114,6 +119,8 @@ class SpellcheckerService:
 
         Args:
             word: The word to be matched.
+            max_edit: An integer describing the maximum edit distance
+                      allowed. Defaults to None.
 
         Returns:
             Returns:
@@ -156,7 +163,7 @@ class SpellcheckerService:
         of the spellchecker.
 
         Returns:
-          A string containing
+          A string containing:
           - the time used for the latest search in the dictionary
           for correctly spelled words with a low edit distance
           to the given word

@@ -10,8 +10,8 @@
 
     Based on Steve Hanov's very informative blog post on
     http://stevehanov.ca/blog/index.php?id=114.
-    
-    This implementation also takes the possibility of the transposition
+
+    The following implementation also takes the possibility of the transposition
     of two characters into account.
 """
 
@@ -111,14 +111,12 @@ def calculate(node, char_source, word_source, word_target,
         curr_row.append(smallest_cost)
 
     matrix.append(curr_row)
+
     tmp = rows_per_char[calc_index(char_source)]
     rows_per_char[calc_index(char_source)] = prev_row_idx + 1
 
     if node.is_valid_end:
-        dl_distance = curr_row[-1]
-        if dl_distance not in candidates:
-            candidates[dl_distance] = []
-        candidates[dl_distance].append(f"{word_source+char_source}({curr_row[-1]})")
+        add_word_as_candidate(candidates, word_source+char_source, curr_row[-1])
 
     for i, child in enumerate(node.children):
         if child and not (max_edit and min(curr_row) > max_edit):
@@ -159,3 +157,16 @@ def calculate_min(matrix, curr_row, prev_row_idx, col, cost, row_w_match, col_w_
     )
     #print(f"subst:{subst}, insert:{insert}, delete:{delete}, transp:{transp}")
     return min(subst, insert, delete, transp)
+
+def add_word_as_candidate(candidates, word, dl_distance):
+    """ Adds word as candidate for correct spelling
+
+    Args:
+        candidates: Dict holding candidate words. Keys are Damerau-Levenshtein distance,
+                    values lists of candidate words with that particular distance.
+        word: The candidate word to be added as a string.
+        dl_distance: An integer describing the Damera-Levenshtein distance.
+    """
+    if dl_distance not in candidates:
+        candidates[dl_distance] = []
+    candidates[dl_distance].append(f"{word}({dl_distance})")

@@ -63,3 +63,10 @@ class TestTrie(unittest.TestCase):
         
         word = self.trie.find("bar")
         self.assertEqual(word, False)
+    
+    def test_get_size_returns_correct_number_of_keys_in_the_trie(self):
+        words = ["art", "artist", "banana", "car", "carbon", "zebra"]
+        for word in words:
+            self.trie.add(word)
+        count = self.trie.get_size()
+        self.assertEqual(count, len(words))
