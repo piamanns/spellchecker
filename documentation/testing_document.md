@@ -21,14 +21,17 @@ The current overall branch coverage of the automated tests is 97%:
 Testing of the performance of the two spellchecker implementations on different size dictionaries has been carried out manually. 
 
 The program prints out the time used for the search for correctly spelled alternatives for a misspelled word after each spelling check, as well as the size of the dictionary. The timing is handled by the [SpellcheckerService-class](../src/services/spellchecker_service.py#L94).
-The dictionary used can be changed by changing the filename of the file containing the wordlist with correctly spelled (WORDLIST_FILENAME) in the [.env-file.](../.env). The wordlist file should be placed in the data directory and contain one word per row. **Only letters a-z** are allowed for now.
+
+The dictionary used can be changed by changing the filename of the file containing the wordlist with correctly spelled (WORDLIST_FILENAME) in the [.env-file](../.env). The wordlist file should be placed in the data directory and contain one word per row.  
+**Only letters a-z** are allowed for now.
 
 ### Some initial results
 
 Wordlist used for tests downloaded from [http://app.aspell.net/create](http://app.aspell.net/create).
 
-**Word searched for:** "zbra"
-**Dictionary size:** 90 555 words
+**Word searched for:** "zbra"  
+**Dictionary size:** 90 555 words.  
+
 
 | Algorithm | Result | Max edit distance | Time used (seconds) |
 | --- | --- | --- | --- | 
