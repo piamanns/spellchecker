@@ -6,8 +6,10 @@ A Python spelling checker and corrector. A course assignment for the Data Struct
 - [Week 1](/documentation/weekly_report_1.md)
 - [Week 2](/documentation/weekly_report_2.md)
 - [Week 3](/documentation/weekly_report_3.md)
+- [Week 4](/documentation/weekly_report_4.md)
 
 ## Documentation
+- [Implementation](/documentation/implementation_document.md)
 - [Testing](/documentation/testing_document.md)
 
 ## Install and run
@@ -26,7 +28,7 @@ poetry run invoke start
 
 ## Other commands:
 
-### Run tests:
+### Run unit tests:
 
 ```bash
 poetry run invoke test
