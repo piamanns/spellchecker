@@ -95,7 +95,7 @@ class SpellcheckerService:
 
         candidates = []
         wordlist = self.get_all()
-        min_dist = max(len(word), len(wordlist[0]))
+        min_dist = max_edit if max_edit else max(len(word), len(wordlist[0]))
         for dict_word in wordlist:
             if max_edit and abs(len(word)-len(dict_word)) > max_edit:
                 continue

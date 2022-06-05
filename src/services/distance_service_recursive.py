@@ -55,8 +55,10 @@ def calculate_dl_distance_recursive(word_target: str, trie, max_edit=None):
                 big_cost, candidates
             )
 
-    smallest_distance = min(candidates.keys())
-    return candidates[smallest_distance]
+    if candidates.keys():
+        return candidates[min(candidates.keys())]
+    else:
+       return []
 
 def calculate(node, char_source, word_source, word_target,
               prev_row_idx, matrix, rows_per_char, max_edit,
@@ -115,11 +117,13 @@ def calculate(node, char_source, word_source, word_target,
     tmp = rows_per_char[calc_index(char_source)]
     rows_per_char[calc_index(char_source)] = prev_row_idx + 1
 
-    if node.is_valid_end:
+    max_cost = max_edit if max_edit else big_cost
+
+    if node.is_valid_end and curr_row[-1] <= max_cost:
         add_word_as_candidate(candidates, word_source+char_source, curr_row[-1])
 
     for i, child in enumerate(node.children):
-        if child and not (max_edit and min(curr_row) > max_edit):
+        if child and min(curr_row) <= max_cost:
             calculate(child, calc_char(i), word_source+char_source, word_target,
                 prev_row_idx+1, matrix, rows_per_char,
                 max_edit, big_cost, candidates

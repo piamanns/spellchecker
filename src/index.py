@@ -60,7 +60,9 @@ def check_spelling(recursive=False):
     else:
         result = spellchecker_service.find_closest_match(word, max_edit)
 
-    if result[0] == word:
+    if len(result) == 0:
+        print("No suggestions for correct spelling were found.")
+    elif result[0] == word:
         print("The word is correctly spelled.")
     else:
         print(f"Did you mean {', ' .join(result)}?")
@@ -81,23 +83,24 @@ def main():
         try:
             command = int(input("Choose a command: "))
         except ValueError:
-            print("No such command.\nTry again!")
-            continue
+            command = None
 
         if command == 1:
             add_word()
-        if command == 2:
+        elif command == 2:
             find_word()
-        if command == 3:
+        elif command == 3:
             get_all()
-        if command == 4:
+        elif command == 4:
             calculate_distance()
-        if command == 5:
+        elif command == 5:
             check_spelling(False)
-        if command == 6:
+        elif command == 6:
             check_spelling(True)
-        if command == 0:
+        elif command == 0:
             break
+        else: 
+            print("No such command.\nTry again!")
 
 
 if __name__ == "__main__":
