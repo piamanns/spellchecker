@@ -104,6 +104,7 @@ class SpellcheckerService:
                 if dl_dist < min_dist:
                     candidates.clear()
                     min_dist = dl_dist
+                    max_edit = min_dist
                 candidates.append(f"{dict_word}({dl_dist})")
 
         end = perf_counter()

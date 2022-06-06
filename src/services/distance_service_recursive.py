@@ -22,6 +22,9 @@ from services.alphabet_utils import(
     calc_char
 )
 
+
+max_cost_global = None
+
 def calculate_dl_distance_recursive(word_target: str, trie, max_edit=None):
     """ Calculates the Damerau-Lewenshtein distance between the given word
         and all words in the given trie.
@@ -38,6 +41,9 @@ def calculate_dl_distance_recursive(word_target: str, trie, max_edit=None):
         Damerau-Levenshtein distance to the given word.
     """
 
+    global max_cost_global
+    max_cost_global = max_edit
+
     first_char_nodes = trie.get_root().children
     candidates = {}
     big_cost = trie.get_max_keylength()
@@ -51,17 +57,16 @@ def calculate_dl_distance_recursive(word_target: str, trie, max_edit=None):
 
             calculate(
                 node, letter, "", word_target,
-                1, matrix, rows_per_char, max_edit,
+                1, matrix, rows_per_char,
                 big_cost, candidates
             )
 
     if candidates.keys():
         return candidates[min(candidates.keys())]
-    else:
-       return []
+    return []
 
 def calculate(node, char_source, word_source, word_target,
-              prev_row_idx, matrix, rows_per_char, max_edit,
+              prev_row_idx, matrix, rows_per_char,
               big_cost, candidates):
     """ A recursive function for filling in the next row
         in the matrix.
@@ -79,8 +84,6 @@ def calculate(node, char_source, word_source, word_target,
         rows_per_char: A list containing the indexes of rows where letters
                        were last seen. The list is indexed by the ordinal number
                        of the letters in the used alphabet.
-        max_edit: An integer representing the maximum Damerau-Levenshtein distance
-                  allowed. None if no maximum distance is set.
         big_cost: An integer representing an edit distance large enough never to
                   be chosen.
         candidates: A dict containing candidate words for the correct spelling of
@@ -88,6 +91,7 @@ def calculate(node, char_source, word_source, word_target,
                     containing words from the trie with that particular Damerau-
                     Levenshtein distance to the given word.
     """
+    global max_cost_global
 
     cols = len(word_target) + 2
     col_per_char = 0
@@ -117,16 +121,17 @@ def calculate(node, char_source, word_source, word_target,
     tmp = rows_per_char[calc_index(char_source)]
     rows_per_char[calc_index(char_source)] = prev_row_idx + 1
 
-    max_cost = max_edit if max_edit else big_cost
+    max_cost = max_cost_global if max_cost_global else big_cost
 
     if node.is_valid_end and curr_row[-1] <= max_cost:
         add_word_as_candidate(candidates, word_source+char_source, curr_row[-1])
+        max_cost_global = curr_row[-1]
 
     for i, child in enumerate(node.children):
         if child and min(curr_row) <= max_cost:
             calculate(child, calc_char(i), word_source+char_source, word_target,
                 prev_row_idx+1, matrix, rows_per_char,
-                max_edit, big_cost, candidates
+                big_cost, candidates
             )
 
     rows_per_char[calc_index(char_source)] = tmp
