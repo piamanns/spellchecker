@@ -12,6 +12,7 @@ def show_commands():
     print("4 - Calculate Damerau-Levensthein distance")
     print("5 - Check spelling (baseline for-loop)")
     print("6 - Check spelling (recursive)")
+    print("7 - Check spelling (recursive, class implementation)")
     print("0 - Quit")
     print()
 
@@ -43,7 +44,7 @@ def calculate_distance():
     print_matrix(matrix)
     print(f"\nThe Demerau-Levenshtein distance between the words is {matrix[-1][-1]}.")
 
-def check_spelling(recursive=False):
+def check_spelling(method: str):
     word = input("Type word to be spell checked: ")
     try:
         max_edit = int(input(
@@ -53,10 +54,13 @@ def check_spelling(recursive=False):
         max_edit = None
 
     result = []
-    if recursive:
+
+    if method == "recursive":
         result = spellchecker_service.find_closest_match_recursively(
                  word, max_edit
         )
+    elif method == "recursive_class":
+        result = spellchecker_service.find_closest_match_w_class(word, max_edit)
     else:
         result = spellchecker_service.find_closest_match(word, max_edit)
 
@@ -94,12 +98,14 @@ def main():
         elif command == 4:
             calculate_distance()
         elif command == 5:
-            check_spelling(False)
+            check_spelling(None)
         elif command == 6:
-            check_spelling(True)
+            check_spelling("recursive")
+        elif command == 7:
+            check_spelling("recursive_class")
         elif command == 0:
             break
-        else: 
+        else:
             print("No such command.\nTry again!")
 
 
