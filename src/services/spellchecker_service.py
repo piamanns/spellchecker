@@ -3,7 +3,6 @@ from entities.trie import Trie
 from repositories.wordlist_repository import wordlist_repository
 from services.distance_service import calculate_dl_distance
 from services.distance_service_recursive import calculate_dl_distance_recursive
-from services.distance_service_class import DistanceServiceRecursive
 
 class SpellcheckerService:
     """ Class responsible for the app logic.
@@ -176,18 +175,5 @@ class SpellcheckerService:
             + f"\n({self._dictionary.get_size()} words in dictionary.)\n"
         )
 
-    def find_closest_match_w_class(self, word: str, max_edit=None):
-        if self.find_word(word):
-            return [word]
-
-        dsr = DistanceServiceRecursive()
-        start = perf_counter()
-
-        candidates = dsr.calculate_dl_distance(word, self._dictionary, max_edit)
-
-        end = perf_counter()
-        self._latest_search_time = end-start
-
-        return candidates
 
 spellchecker_service = SpellcheckerService()

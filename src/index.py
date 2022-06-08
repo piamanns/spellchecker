@@ -12,7 +12,6 @@ def show_commands():
     print("4 - Calculate Damerau-Levensthein distance")
     print("5 - Check spelling (baseline for-loop)")
     print("6 - Check spelling (recursive)")
-    print("7 - Check spelling (recursive, class implementation)")
     print("0 - Quit")
     print()
 
@@ -59,8 +58,6 @@ def check_spelling(method: str):
         result = spellchecker_service.find_closest_match_recursively(
                  word, max_edit
         )
-    elif method == "recursive_class":
-        result = spellchecker_service.find_closest_match_w_class(word, max_edit)
     else:
         result = spellchecker_service.find_closest_match(word, max_edit)
 
@@ -101,8 +98,6 @@ def main():
             check_spelling(None)
         elif command == 6:
             check_spelling("recursive")
-        elif command == 7:
-            check_spelling("recursive_class")
         elif command == 0:
             break
         else:
