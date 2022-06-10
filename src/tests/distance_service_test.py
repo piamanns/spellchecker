@@ -10,6 +10,10 @@ class TestDistanceService(unittest.TestCase):
     def test_substituted_char_returns_correct_distance(self):
         dl_distance = calculate_dl_distance("definately", "definitely")
         self.assertEqual(dl_distance, 1)
+    
+    def test_substituted_by_neighbouring_key_returns_correct_distance(self):
+        dl_distance = calculate_dl_distance("sefinitely", "definitely", True)
+        self.assertEqual(dl_distance, 0.5)
 
     def test_inserted_chars_returns_correct_result(self):
         dl_distance = calculate_dl_distance("glamourouse", "glamorous")
@@ -61,7 +65,7 @@ class TestDistanceService(unittest.TestCase):
         word_source = "craton"
         word_target = "cartoon"
         dl_distance = calculate_dl_distance(word_source, word_target)
-        matrix = calculate_dl_distance(word_source, word_target, True)
+        matrix = calculate_dl_distance(word_source, word_target, False, True)
         self.assertEqual(len(matrix), len(word_source) + 2)
         self.assertEqual(len(matrix[0]), len(word_target) + 2)
         self.assertEqual(matrix[-1][-1], dl_distance)
@@ -69,7 +73,7 @@ class TestDistanceService(unittest.TestCase):
     def test_matrix_content_is_calculated_correctly(self):
         word_source = "zbar"
         word_target = "zebra"
-        matrix = calculate_dl_distance(word_source, word_target, True)
+        matrix = calculate_dl_distance(word_source, word_target, False, True)
         rows = []
         cols = len(word_target) + 2
         max_cost = len(word_source) + len(word_target)

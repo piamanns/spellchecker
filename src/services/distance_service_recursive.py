@@ -18,12 +18,13 @@
 
 from services.alphabet_utils import(
     CHAR_COUNT,
+    NEIGHBOURING_KEYS,
     calc_index,
     calc_char
 )
 
 
-def calculate_dl_distance_recursive(word_target: str, trie, max_dist=None):
+def calculate_dl_distance_recursive(word_target: str, trie, max_dist=None, neighbour_check=False):
     """ Calculates the Damerau-Lewenshtein distance between the given word
         and all words in the given trie.
 
@@ -33,6 +34,9 @@ def calculate_dl_distance_recursive(word_target: str, trie, max_dist=None):
         trie: A Trie-object containing the words in the wordlist.
         max_dist: The maximum Damerau-Lewenshtein distance allowed.
                   Defaults to None.
+        neighbour_check: A boolean indicating whether a substitution with a neighbouring
+                         key on the keyboard should be prioritised (i. e. assigned a
+                         slightly lower edit cost). Defaults to False.
 
     Returns:
         A list containing the word(s) from the trie with the lowest
@@ -56,7 +60,7 @@ def calculate_dl_distance_recursive(word_target: str, trie, max_dist=None):
             curr_max_dist = calculate(
                                 node, letter, "", word_target,
                                 1, matrix, rows_per_char, curr_max_dist,
-                                big_cost, candidates
+                                big_cost, candidates, neighbour_check
                             )
 
     if candidates.keys():
@@ -65,7 +69,7 @@ def calculate_dl_distance_recursive(word_target: str, trie, max_dist=None):
 
 def calculate(node, char_source, word_source, word_target,
               prev_row_idx, matrix, rows_per_char, max_dist,
-              big_cost, candidates):
+              big_cost, candidates, neighbour_check):
     """ A recursive function for filling in the next row
         in the matrix.
 
@@ -89,6 +93,9 @@ def calculate(node, char_source, word_source, word_target,
                     the given word. Keys are the Damerau-Levenshtein distances,
                     values lists containing words from the trie with that particular
                     Damerau-Levenshtein distance to the given word.
+        neighbour_check: A boolean indicating whether a substitution with a neighbouring
+                  key on the keyboard should be prioritised (i. e., assigned a
+                  slightly lower edit cost).
     """
 
     cols = len(word_target) + 2
@@ -106,6 +113,8 @@ def calculate(node, char_source, word_source, word_target,
         if char_source == char_target:
             cost = 0
             col_per_char = col
+        elif neighbour_check and char_target in NEIGHBOURING_KEYS[char_source]:
+            cost = 0.5
         else:
             cost = 1
 
@@ -129,7 +138,7 @@ def calculate(node, char_source, word_source, word_target,
         if child and min(curr_row) <= curr_max_dist:
             curr_max_dist = calculate(child, calc_char(i), word_source+char_source, word_target,
                 prev_row_idx+1, matrix, rows_per_char, curr_max_dist,
-                big_cost, candidates
+                big_cost, candidates, neighbour_check
             )
 
     rows_per_char[calc_index(char_source)] = tmp
@@ -146,7 +155,9 @@ def calculate_min(matrix, curr_row, prev_row_idx, col, cost, row_w_match, col_w_
         curr_row: A list containing the edit costs in the current row so far.
         prev_row_idx: An integer representing the index number of the previous row.
         col: The index number of the current column as an integer.
-        cost: The cost of a substitution edit (0 or 1).
+        cost: The cost of a substitution edit (0 or 1). Neighbouring key substitutions
+              are assigned a cost of 0.5, if prioritising substitutions by neighbouring
+              keys is activated.
         row_w_match: The latest row where the character in the current column
                      was seen.
         col_w_match: The latest column where the character in the current

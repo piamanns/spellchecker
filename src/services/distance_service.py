@@ -13,24 +13,26 @@
 
 from services.alphabet_utils import(
     CHAR_COUNT,
+    NEIGHBOURING_KEYS,
     calc_index
 )
 
 
-def calculate_dl_distance(word_a: str, word_b:str, debug_flag=False):
-    """Calculates the Damerau-Levensthein distance between two words.
+def calculate_dl_distance(word_a: str, word_b:str, neighbour_check=False, debug_flag=False):
+    """Calculates the Damerau-Levenshtein distance between two words.
 
     Args:
         word_a: The source word as a string.
         word_b: The target word as a string.
-        debug_flag: A boolean describing whether the matrix
-                    resulting from the calculation should be
-                    returned in its entirety (instead of
-                    only the last cell containing the
-                    final Damerau-Levenshtein distance).
-                    Defaults to False.
+        neighbour_check: A boolean indicating whether substitutions by neighbouring
+                         keys on the keyboard should be assigned a slightly lower
+                         edit cost (0.5 instead of 1). Defaults to False.
+        debug_flag: A boolean indicating whether the matrix resulting from
+                    the calculation should be returned in its entirety
+                    (instead of only the last cell containing the final
+                    Damerau-Levenshtein distance). Defaults to False.
     Returns:
-        An integer describing the edit distance between the two words.
+        An integer describing the Damerau-Levenshtein distance between the two words.
         Minimum value is 0, maximum the length of the longer word.
     """
 
@@ -49,9 +51,11 @@ def calculate_dl_distance(word_a: str, word_b:str, debug_flag=False):
             row_w_match = rows_per_char[calc_index(char_b)]
             col_w_match = col_per_char
 
-            if word_a[row-2] == word_b[col-2]:
+            if char_a == char_b:
                 cost = 0
                 col_per_char = col
+            elif neighbour_check and char_a in NEIGHBOURING_KEYS[char_b]:
+                cost = 0.5
             else:
                 cost = 1
 
@@ -83,7 +87,7 @@ def calculate_min(matrix, row, col, cost, row_w_match, col_w_match):
         matrix: The matrix used for calculating the DL-distance.
         row: An integer representing the current row in the matrix.
         col: An integer representing the current column in the matrix.
-        cost: The cost of a substitution edit (0 or 1).
+        cost: The cost of a substitution edit (0, 0.5 or 1).
         row_w_match: The latest row where the character in the current column
                      was seen.
         col_w_match: The latest column where the character in the current

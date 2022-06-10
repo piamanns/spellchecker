@@ -24,6 +24,10 @@ def input_word(prompt: str):
             return word
         print(f"\nOnly the characters '{get_allowed_chars()}'\nare allowed. Try again!\n")
 
+def input_yes_no(prompt: str):
+    answer = input(prompt)
+    return answer == "y"
+
 def add_word():
     word = input_word("Type a word: ")
     if spellchecker_service.add_word(word):
@@ -48,7 +52,8 @@ def get_all():
 def calculate_distance():
     word_a = input_word("Type first word: ")
     word_b = input_word("Type second word: ")
-    matrix = spellchecker_service.calculate_distance(word_a, word_b, True)
+    neighbour_check = input_yes_no("Adjust for neighbouring keys? (y/n): ")
+    matrix = spellchecker_service.calculate_distance(word_a, word_b, neighbour_check, True)
     print_matrix(matrix)
     print(f"\nThe Demerau-Levenshtein distance between the words is {matrix[-1][-1]}.")
 
@@ -61,14 +66,15 @@ def check_spelling(method: str):
     except ValueError:
         max_edit = None
 
-    result = []
+    neighbour_check = input_yes_no("Prioritize words with neighbouring keys? (y/n): ")
 
+    result = []
     if method == "recursive":
         result = spellchecker_service.find_closest_match_recursively(
-                 word, max_edit
+                 word, max_edit, neighbour_check
         )
     else:
-        result = spellchecker_service.find_closest_match(word, max_edit)
+        result = spellchecker_service.find_closest_match(word, max_edit, neighbour_check)
 
     if len(result) == 0:
         print("No suggestions for correct spelling were found.")

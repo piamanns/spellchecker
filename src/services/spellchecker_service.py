@@ -14,7 +14,6 @@ class SpellcheckerService:
         """
         self._dictionary = Trie()
         self._latest_search_time = 0
-        self._max_edit = None
         self.load_wordlist()
 
     def load_wordlist(self):
@@ -55,29 +54,37 @@ class SpellcheckerService:
 
         return self._dictionary.find(word)
 
-    def calculate_distance(self, word_a: str, word_b: str, debug_flag=False):
+    def calculate_distance(self, word_a: str, word_b: str, neighbour_check=False, debug_flag=False):
         """ Calculates the Damerau-Lewenshtein distance between two words.
 
         Args:
             word_a: The source word as a string.
             word_b: The target word as a string.
+            neighbour_check: A boolean indicatiing whether substitutions by
+                             neighbouring characters on the keyboard should be
+                             assigned a slightly lower edit cost than other
+                             substitutions.
             debug_flag: A boolean describing whether the matrix
                         resulting from the calculation should be
                         returned in its entirety. Defaults to False.
 
         Returns:
-            The Damerau-Lewnshtein distance as an integer.
+            The Damerau-Lewnshtein distance as an integer (or float, if neighbouring key
+            priority is activated).
         """
 
-        return calculate_dl_distance(word_a, word_b, debug_flag)
+        return calculate_dl_distance(word_a, word_b, neighbour_check, debug_flag)
 
-    def find_closest_match(self, word:str, max_edit=None):
+    def find_closest_match(self, word:str, max_edit=None, neighbour_check=False):
         """ Finds closest matching words in the dictionary for the given word.
 
         Args:
             word: The word to be matched.
             max_edit: An integer describing the maximum edit distance
                       allowed. Defaults to None.
+            neighbour_check: A boolean indicatiing whether substitutions by
+                             neighbouring characters on the keyboard should be
+                             prioritised.
 
         Returns:
             A list of candidate words with the lowest Damerau-Lewenshtein
@@ -85,8 +92,6 @@ class SpellcheckerService:
             dictionary (i.e. was correctly spelled) the list contains
             only the word itself.
         """
-        if max_edit:
-            self._max_edit = max_edit
 
         if self.find_word(word):
             return [word]
@@ -99,7 +104,7 @@ class SpellcheckerService:
         for dict_word in wordlist:
             if max_edit and abs(len(word)-len(dict_word)) > max_edit:
                 continue
-            dl_dist = calculate_dl_distance(word, dict_word)
+            dl_dist = calculate_dl_distance(word, dict_word, neighbour_check)
             if dl_dist <= min_dist:
                 if dl_dist < min_dist:
                     candidates.clear()
@@ -112,7 +117,7 @@ class SpellcheckerService:
 
         return candidates
 
-    def find_closest_match_recursively(self, word: str, max_edit=None):
+    def find_closest_match_recursively(self, word: str, max_edit=None, neighbour_check=False):
         """ Finds closest matching words in the dictionary for the given word.
 
         The search utilizes a recursive traversal of the trie for
@@ -122,6 +127,9 @@ class SpellcheckerService:
             word: The word to be matched.
             max_edit: An integer describing the maximum edit distance
                       allowed. Defaults to None.
+            neighbour_check: A boolean indicating whether substitutions by
+                             neighbouring characters on the keyboard should be
+                             prioritised.
 
         Returns:
             Returns:
@@ -136,8 +144,8 @@ class SpellcheckerService:
 
         start = perf_counter()
 
-        candidates = calculate_dl_distance_recursive(word, self._dictionary, max_edit)
-
+        candidates = calculate_dl_distance_recursive(word, self._dictionary,
+                                                     max_edit, neighbour_check)
         end = perf_counter()
         self._latest_search_time = end-start
 
