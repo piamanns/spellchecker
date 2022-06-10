@@ -1,6 +1,6 @@
 from pathlib import Path
 from config import WORDLIST_PATH
-
+from services.alphabet_utils import check_allowed_chars
 
 class WordlistRepository:
     def __init__(self, file_path):
@@ -28,7 +28,8 @@ class WordlistRepository:
         with open(self._file_path, encoding="utf-8") as file:
             for row in file:
                 row = row.replace("\n", "")
-                wordlist.append(row)
+                if check_allowed_chars(row):
+                    wordlist.append(row)
 
             return wordlist
 

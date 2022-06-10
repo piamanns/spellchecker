@@ -2,6 +2,7 @@
 """
 
 from services.spellchecker_service import spellchecker_service
+from services.alphabet_utils import check_allowed_chars, get_allowed_chars
 
 
 def show_commands():
@@ -15,17 +16,25 @@ def show_commands():
     print("0 - Quit")
     print()
 
+
+def input_word(prompt: str):
+    while True:
+        word = input(prompt)
+        if check_allowed_chars(word):
+            return word
+        print(f"\nOnly the characters '{get_allowed_chars()}'\nare allowed. Try again!\n")
+
 def add_word():
-    word = input("Type a word: ")
+    word = input_word("Type a word: ")
     if spellchecker_service.add_word(word):
-        print(f"\n\"{word}\" was added.")
+        print(f"\n'{word}' was added.")
     else:
-        print(f"\n{word} is already in the dictionary.")
+        print(f"\n'{word}' is already in the dictionary.")
 
 def find_word():
-    word = input("Type word to search for: ")
+    word = input_word("Type word to search for: ")
     if spellchecker_service.find_word(word):
-        print(f"\nFound \"{word}\" in the dictionary!")
+        print(f"\nFound '{word}' in the dictionary!")
     else:
         print("\nNo such word in the dictionary.")
 
@@ -37,14 +46,14 @@ def get_all():
     print()
 
 def calculate_distance():
-    word_a = input("Type first word: ")
-    word_b = input("Type second word: ")
+    word_a = input_word("Type first word: ")
+    word_b = input_word("Type second word: ")
     matrix = spellchecker_service.calculate_distance(word_a, word_b, True)
     print_matrix(matrix)
     print(f"\nThe Demerau-Levenshtein distance between the words is {matrix[-1][-1]}.")
 
 def check_spelling(method: str):
-    word = input("Type word to be spell checked: ")
+    word = input_word("Type word to be spell checked: ")
     try:
         max_edit = int(input(
             "Enter maximum edit distance (empty for unrestricted): "

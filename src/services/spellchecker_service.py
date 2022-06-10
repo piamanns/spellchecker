@@ -4,6 +4,7 @@ from repositories.wordlist_repository import wordlist_repository
 from services.distance_service import calculate_dl_distance
 from services.distance_service_recursive import calculate_dl_distance_recursive
 
+
 class SpellcheckerService:
     """ Class responsible for the app logic.
     """
@@ -31,16 +32,16 @@ class SpellcheckerService:
             word: The word to be added as a string.
 
         Returns:
-            True if the operation was carried out (i.e. the word was not already
-            present in the wordlist), False if the word was already found in the
+            The added word if the operation was carried out (i.e. the word was not already
+            present in the wordlist), None if the word was already found in the
             wordlist.
         """
 
         if not self._dictionary.find(word):
             new_word = wordlist_repository.add(word)
             self._dictionary.add(new_word)
-            return True
-        return False
+            return new_word
+        return None
 
     def find_word(self, word: str):
         """ Checks if the word exists in the dictionary.
@@ -172,7 +173,7 @@ class SpellcheckerService:
 
         return (
             f"\nSearch took {self._latest_search_time} seconds."
-            + f"\n({self._dictionary.get_size()} words in dictionary.)\n"
+            + f"\n({self._dictionary.get_size()} words in dictionary.)"
         )
 
 
