@@ -1,4 +1,4 @@
-# Weekly Progress Report 4
+# Weekly Progress Report 5
 
 This week I have tweaked the algorithms for finding suggestions for correct spelling further, in order to achieve higher search speed and, potentially, higher relevance for the suggestions. (The latter task is naturally much harder to both implement and evaluate, since relevance is highly context dependent and the current program is limited to handling single words only.)
 
