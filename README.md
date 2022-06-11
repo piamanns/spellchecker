@@ -7,8 +7,10 @@ A Python spelling checker and corrector. A course assignment for the Data Struct
 - [Week 2](/documentation/weekly_report_2.md)
 - [Week 3](/documentation/weekly_report_3.md)
 - [Week 4](/documentation/weekly_report_4.md)
+- [Week 5](/documentation/weekly_report_5.md)
 
 ## Documentation
+- [Project specification](/documentation/project_specification.md)
 - [Implementation](/documentation/implementation_document.md)
 - [Testing](/documentation/testing_document.md)
 
