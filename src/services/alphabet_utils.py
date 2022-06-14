@@ -58,7 +58,7 @@ def calc_char(index: int):
 def check_allowed_chars(string_to_check: str):
     """Checks if all characters in a given string are in the allowed alphabet.
 
-    Only ASCII-letters allowed for now (A-Z, a-z).
+    Only lowercase ASCII-letters allowed for now (a-z).
 
     Args:
         string_to_check: The string to check.
@@ -68,7 +68,7 @@ def check_allowed_chars(string_to_check: str):
       the allowed alphabet, False if any non-alphabet characters were found.
     """
 
-    return all(char in string.ascii_letters for char in string_to_check)
+    return all(char in string.ascii_lowercase for char in string_to_check)
 
 def get_allowed_chars():
     """Returns the allowed characters in the used alphabet.
@@ -77,4 +77,4 @@ def get_allowed_chars():
         A string containing all the allowed characters.
     """
 
-    return string.ascii_letters
+    return string.ascii_lowercase
