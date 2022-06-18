@@ -8,11 +8,17 @@ A Python spelling checker and corrector. A course assignment for the Data Struct
 - [Week 3](/documentation/weekly_report_3.md)
 - [Week 4](/documentation/weekly_report_4.md)
 - [Week 5](/documentation/weekly_report_5.md)
+- [Week 6](/documentation/weekly_report_6.md)
 
 ## Documentation
 - [Project specification](/documentation/project_specification.md)
 - [Implementation](/documentation/implementation_document.md)
 - [Testing](/documentation/testing_document.md)
+
+## Wordlists used
+- List of English words: https://github.com/first20hours/google-10000-english ([License](https://github.com/first20hours/google-10000-english/blob/master/LICENSE.md))
+- Wikipedia: List of common misspellings: https://en.wikipedia.org/wiki/Wikipedia:Lists_of_common_misspellings/For_machines ([CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/))
+
 
 ## Install and run
 
@@ -43,6 +49,13 @@ Report is created in htmlcov/index.html in the root directory.
 ```bash
 poetry run invoke coverage-report
 ```
+
+### Run performance test:
+
+```bash
+poetry run invoke performance-test
+```
+The test results are written to the test_results-directory in the project root.
 
 ### Check code quality with pylint:
 

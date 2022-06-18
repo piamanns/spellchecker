@@ -36,6 +36,10 @@ Every node in the trie contains a Python list of pointers to possible child node
 length difference to the misspelled word exceeds the maximum allowed edit distance can be skipped without a calculation, which increases the speed of the search.
 - The program also allows for an optional prioritisation of misspellings where a character has been replaced with a character on a neighbouring key on the keyboard (one of several possible typographical errors that might occur when typing on a keyboard.) This is achieved by assigning substitutions by a neighbouring key a lower edit cost than other substitutions when calculating Damerau-Levenshtein distances.
 
+## Wordlists used
+
+- List of English words: https://github.com/first20hours/google-10000-english ([License](https://github.com/first20hours/google-10000-english/blob/master/LICENSE.md))
+- Wikipedia: List of common misspellings: https://en.wikipedia.org/wiki/Wikipedia:Lists_of_common_misspellings/For_machines ([CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/))
 
 ## Sources
 
