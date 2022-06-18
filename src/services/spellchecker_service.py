@@ -60,7 +60,7 @@ class SpellcheckerService:
         Args:
             word_a: The source word as a string.
             word_b: The target word as a string.
-            neighbour_check: A boolean indicatiing whether substitutions by
+            neighbour_check: A boolean indicating whether substitutions by
                              neighbouring characters on the keyboard should be
                              assigned a slightly lower edit cost than other
                              substitutions.
@@ -102,14 +102,13 @@ class SpellcheckerService:
         wordlist = self.get_all()
         min_dist = max_edit if max_edit else max(len(word), len(wordlist[0]))
         for dict_word in wordlist:
-            if max_edit and abs(len(word)-len(dict_word)) > max_edit:
+            if abs(len(word)-len(dict_word)) > min_dist:
                 continue
             dl_dist = calculate_dl_distance(word, dict_word, neighbour_check)
             if dl_dist <= min_dist:
                 if dl_dist < min_dist:
                     candidates.clear()
                     min_dist = dl_dist
-                    max_edit = min_dist
                 candidates.append(f"{dict_word}({dl_dist})")
 
         end = perf_counter()
