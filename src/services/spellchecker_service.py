@@ -166,6 +166,15 @@ class SpellcheckerService:
         self._dictionary = Trie()
         wordlist_repository.delete_all()
 
+    def get_search_time(self):
+        """Returns time spent for latest search
+
+        Returns:
+            A float representing the search time in seconds.
+        """
+
+        return self._latest_search_time
+
     def get_info(self):
         """ Returns information about the setup and performance
         of the spellchecker.
