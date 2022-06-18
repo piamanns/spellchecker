@@ -3,13 +3,13 @@ import os, sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from config import SPELLING_ERRORS_PATH
 from random import choice
-from repositories.spelling_error_repository import SpellingErrorRepository
+from tests.spelling_error_parser import SpellingErrorParser
 from services.spellchecker_service import spellchecker_service
 
 
 class PerformanceTester:
     def __init__(self):
-        self._spelling_error_repository = SpellingErrorRepository(SPELLING_ERRORS_PATH)
+        self._spelling_error_repository = SpellingErrorParser(SPELLING_ERRORS_PATH)
         self._error_dict = self._spelling_error_repository.get_errordict()
 
     def run_all(self):
@@ -81,9 +81,9 @@ class PerformanceTester:
         test_time = datetime.now().strftime("%Y%m%d%H%M%S")       
         file_name = test_time + "_performance_test" + file_suffix + ".txt"
         dirname = os.path.dirname(__file__)
-        file_path = os.path.join(dirname, "..", "..", "data", "test_results", file_name)
+        file_path = os.path.join(dirname, "..", "..", "test_results", file_name)
 
-        print(f"Results: data/test_results/{file_name}")
+        print(f"Results: root/test_results/{file_name}")
    
         with open(file_path, "w", encoding="utf-8") as file:
             for result in results:
