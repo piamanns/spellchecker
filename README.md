@@ -54,7 +54,10 @@ poetry run invoke coverage-report
 ```bash
 poetry run invoke performance-test
 ```
-The test results are written to the test_results-directory in the project root.
+The test results are written to the test_results-directory in the project root.  
+
+Row content in test result files:  
+_misspelling;correct spelling(s);search duration;suggested spelling(s);correct spelling among suggestions (True or False)_
 
 ### Check code quality with pylint:
 
