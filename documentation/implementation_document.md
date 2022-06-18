@@ -39,7 +39,7 @@ length difference to the misspelled word exceeds the maximum allowed edit distan
 ## Wordlists used
 
 - List of English words: https://github.com/first20hours/google-10000-english ([License](https://github.com/first20hours/google-10000-english/blob/master/LICENSE.md))
-- Wikipedia: List of common misspellings: https://en.wikipedia.org/wiki/Wikipedia:Lists_of_common_misspellings/For_machines ([CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/))
+- [Wikipedia: List of common misspellings](https://en.wikipedia.org/wiki/Wikipedia:Lists_of_common_misspellings/For_machines) ([CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/))
 
 ## Sources
 
