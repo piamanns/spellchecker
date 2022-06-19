@@ -32,6 +32,10 @@ class PerformanceTester:
         results = self.run_speed_test(error_list, "recursive")
         self._write(results, "_recursive")
 
+        print(f"Spelling errors used: {', ' .join(error_list)}")
+        print(f"Dictionary size: {spellchecker_service._dictionary.get_size()} words")
+
+
     def create_error_list(self, error_len=5):
         """Creates a list of misspelled words with the given length.
 
@@ -43,7 +47,9 @@ class PerformanceTester:
             error_len: The wanted word length. Defaults to 5.
 
         Returns:
-            A list of strings representing misspellings, all with the same length.
+            A list of strings representing misspellings, all with the
+            same length but beginning with different letters of the
+            alphabet.
         """
 
         error_list = []
@@ -84,8 +90,10 @@ class PerformanceTester:
         file_path = os.path.join(dirname, "..", "..", "test_results", file_name)
 
         print(f"Results: root/test_results/{file_name}")
-   
+        column_names = ["misspelling", "intended", "time", "suggested", "success"]
+
         with open(file_path, "w", encoding="utf-8") as file:
+            file.write(";".join(column_names) + "\n")
             for result in results:
                 misspelling = result[0]
                 correct_spellings = ",".join(result[1])
