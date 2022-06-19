@@ -79,7 +79,7 @@ class PerformanceTester:
 
     def _write(self, results: list, file_suffix=None):
         test_time = datetime.now().strftime("%Y%m%d%H%M%S")       
-        file_name = test_time + "_performance_test" + file_suffix + ".txt"
+        file_name = test_time + "_performance_test" + file_suffix + ".csv"
         dirname = os.path.dirname(__file__)
         file_path = os.path.join(dirname, "..", "..", "test_results", file_name)
 
