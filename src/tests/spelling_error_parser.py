@@ -1,5 +1,6 @@
 from pathlib import Path
 from services.alphabet_utils import check_allowed_chars
+from services.spellchecker_service import spellchecker_service
 
 
 class SpellingErrorParser:
@@ -48,6 +49,14 @@ class SpellingErrorParser:
             errors_per_letter[first_letter][len(error)].append(error)
         return errors_per_letter
 
+    def _check_correct_spellings(self, correct_spellings: list):
+        if not all(check_allowed_chars(csp) for csp in correct_spellings):
+            return False
+        for correct in correct_spellings:
+            if not spellchecker_service.find_word(correct):
+                return False
+        return True
+
     def _check_for_file(self):
         Path(self._file_path).touch()
 
@@ -62,8 +71,8 @@ class SpellingErrorParser:
                 parts = row.split("->")
                 misspelling = parts[0]
                 correct_spellings = parts[1].split(", ")
-                suggestions_ok = all(check_allowed_chars(sgn) for sgn in correct_spellings)
-                if check_allowed_chars(misspelling) and suggestions_ok:
+                corrects_ok = self._check_correct_spellings(correct_spellings)
+                if check_allowed_chars(misspelling) and corrects_ok:
                     self._error_count += 1
                     self._max_error_len = max(len(misspelling), self._max_error_len)
 
