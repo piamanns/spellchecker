@@ -94,6 +94,15 @@ def print_matrix(matrix):
         print()
 
 def main():
+    dispatcher = {
+        1: add_word,
+        2: find_word,
+        3: get_all,
+        4: calculate_distance,
+        5: lambda: check_spelling(None),
+        6: lambda: check_spelling("recursive")
+    }
+
     while True:
         show_commands()
         try:
@@ -101,20 +110,10 @@ def main():
         except ValueError:
             command = None
 
-        if command == 1:
-            add_word()
-        elif command == 2:
-            find_word()
-        elif command == 3:
-            get_all()
-        elif command == 4:
-            calculate_distance()
-        elif command == 5:
-            check_spelling(None)
-        elif command == 6:
-            check_spelling("recursive")
-        elif command == 0:
+        if command == 0:
             break
+        if command and command in dispatcher:
+            dispatcher[command]()
         else:
             print("No such command.\nTry again!")
 
