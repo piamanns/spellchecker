@@ -1,7 +1,5 @@
 # Implementation Document
 
-(Work in progress)
-
 ## Architecture
 
 The code of the application is split into three layers: the user interface, the service layer and the repository layer.
@@ -12,8 +10,6 @@ The code of the application is split into three layers: the user interface, the 
 ![Package diagram with classes](./images/spellchecker-package-diagram.png)
 
 ## Algorithms and data structures utilized
-
-(Work in progress)
 
 ### Trie
 
@@ -30,18 +26,18 @@ When the user enters a word into the program, the word is searched for in the di
 
 The Damerau-Levensthein distance between two strings is calculated using an extended version of the [Wagner-Fischer](https://en.wikipedia.org/wiki/Wagner%E2%80%93Fischer_algorithm) dynamic programming algorithm. The algorithm requires calculating the contents of a matrix with the dimensions (source word length) x (target word length), which means the algorithm has a time complexity of O(n x m). The application contains a functionality for calculating the Damerau-Levenshtein distance between two given strings. In addition to the edit distance value, the functionality also prints out the matrix resulting from the algorithm.
 
-The actual spell checker (and generator of suggested spellings) has two implementations in the application:
+The actual spell checker (and generator of suggested spellings) has **two implementations** in the application:
 
-- A *baseline version* with a for-loop. The entire word list is retrieved from the trie. The list is then iterated, while calculating the Damerau-Levenshtein distance to every word. As words with lower edit distances to the misspelled word are encountered, the maximum edit distance allowed is successively lowered, allowing for some words to be skipped without any calculations (Words with an absolute length difference to the misspelled word larger than the maximum edit distance allowed can be ignored. Even if the prefixes of the words are identical, inserting or deleting the remaining characters - each operation with an edit cost of 1 - would result in the edit distance value being higher than a closer match already found.)  
+A **baseline version** with a for-loop. The entire word list is retrieved from the trie. The list is then iterated, while calculating the Damerau-Levenshtein distance to every word. As words with lower edit distances to the misspelled word are encountered, the maximum edit distance allowed is successively lowered, allowing for some words to be _skipped without any calculations_. (Words with an absolute length difference to the misspelled word larger than the maximum edit distance allowed can be ignored. Even if the prefixes of the words are identical, inserting or deleting the remaining characters - each operation with an edit cost of 1 - would result in the edit distance value being higher than a closer match already found.)  
+The time complexity for the baseline spell checker implementation is O(number of words in the dictionary x (maximum word length)^2).
 
-The time complexity for this spell checker implementation is O(number of words in the dictionary x (maximum word length)^2).
-- A *recursive approach*: The Damerau-Levenshtein distances to the words in the dictionary are calculated recursively while traversing the trie. In this implementation the misspelling is set as the target word (represented by the columns in the matrix), and only one new row needs to be calculated per node/letter in the trie, while the previous rows are shared by all words with the same prefix, and can be reused.  
-As in the baseline version, the maximum allowed edit distance is succesively lowered as closer matches are found. This means entire branches of the trie can be skipped without calculation, if the smallesdt value in the current matrix row exceeds the maximum edit distance allowed.  
-
+A **recursive approach**: The Damerau-Levenshtein distances to the words in the dictionary are calculated recursively while traversing the trie. In this implementation the misspelling is set as the target word (represented by the columns in the matrix), and only one new row needs to be calculated per node/letter in the trie, while the previous rows are shared by all words with the same prefix, and can be reused.  
+As in the baseline version, the maximum allowed edit distance is succesively lowered as closer matches are found. This means entire branches of the trie can be skipped without calculation, if the smallest value in the current matrix row exceeds the maximum edit distance allowed.  
 The time complexity of the recursive implementation of the spell checker is O(maximum word length x number of nodes in the trie)
 
-Both spell checker implementations include the possibility for the user to set the maximum allowed edit distance beforehand. This speeds up the search for spelling suggestions if the automatic capping of the maximum edit distance takes effect slowly (i.e. the maximum allowed edit distance stays high for a long time).
-Both implementations also allow for an optional prioritisation of correctly spelled words where a character has been replaced in the misspelling with a character on a neighbouring key on the keyboard (one of several possible typographical errors that might occur when typing on a keyboard.) This priorisation is achieved by assigning substitutions by a neighbouring key a lower edit cost than other substitutions when calculating Damerau-Levenshtein distances.
+Both spell checker implementations include the possibility for the user to **set the maximum allowed edit distance beforehand**. This speeds up the search for spelling suggestions if the automatic capping of the maximum edit distance takes effect slowly (i.e. the maximum allowed edit distance stays high for a long time).  
+
+Both implementations also allow for an optional prioritisation of correctly spelled words where a character has been replaced in the misspelling with a character on a **neighbouring key** on the keyboard (one of several possible typographical errors that might occur when typing on a keyboard.) This priorisation is achieved by assigning substitutions by a neighbouring key a lower edit cost than other substitutions when calculating Damerau-Levenshtein distances.
 
 ## Wordlist used:
 
