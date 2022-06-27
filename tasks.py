@@ -23,4 +23,4 @@ def coverage_report(ctx):
 
 @task
 def performance_test(ctx):
-  ctx.run("python3 src/tests/performance_tests.py")
+  ctx.run("python3 src/tests/performance_tester.py")

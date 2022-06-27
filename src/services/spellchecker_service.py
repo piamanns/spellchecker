@@ -174,6 +174,16 @@ class SpellcheckerService:
         """
 
         return self._latest_search_time
+    
+    def get_dictionary_size(self):
+        """Gets the size of the used dictionary.
+
+        Returns:
+            The amount of words stored in the dictionary as an integer.
+        """
+
+        return self._dictionary.get_size()
+
 
     def get_info(self):
         """ Returns information about the setup and performance
@@ -188,8 +198,8 @@ class SpellcheckerService:
         """
 
         return (
-            f"\nSearch took {self._latest_search_time} seconds."
-            + f"\n({self._dictionary.get_size()} words in dictionary.)"
+            f"\nSearch took {self.get_search_time()} seconds."
+            + f"\n({self.get_dictionary_size()} words in dictionary.)"
         )
 
 
