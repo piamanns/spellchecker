@@ -17,29 +17,38 @@ The code of the application is split into three layers: the user interface, the 
 
 ### Trie
 
-The reference wordlist/dictionary used for checking the spelling of and finding correctly spelled suggestions for a given word is loaded from a file on disk into a [trie](https://en.wikipedia.org/wiki/Trie) when the program starts. 
+The reference dictionary used for checking the spelling of and finding correctly spelled suggestions for a given word is loaded from a file on disk into a [trie](https://en.wikipedia.org/wiki/Trie) when the program starts. 
 
 The time complexity for insertion, lookup and deletion in a trie is O(m), where m is the length of the key (in this case, a string representing a word). The time complexity of building the trie is thus O(n * m), where n is the number of words in the dictionary.
 
 Every node in the trie contains a Python list of pointers to possible child nodes. The list has a constant size for every node in the trie, with the number of elements in the list corresponding to the number of characters in the alphabet used. This makes the lookup for child nodes fast, but increases the space complexity of the trie, since memory is allocated for a list of the size of the alphabet for every node, even if most nodes will never use some of the pointers.
 
 
-### Damerau-Levenshtein algorithm
+### Algorithms for calculating Damerau-Levenshtein distance
 
-- Basic implementation: comparing two words. Requires calculating the contents of a matrix with the dimensions len(source word) x len(target word), i.e. O(n x m)-time complexity.
-- Comparing misspelled word to all words in large dictionary. App contains two implementations:
-    - _for-loop_: matrix is calculated for each word in the dictionary separately.  
-    Upper bound for time complexity: O(number of words x (maximum word length)^2)
-    - _recursive approach_: Only one matrix row is calculated per node in the trie.  
-    Upper bound for time complexity: O(maximum word length * number of nodes in the trie)
-- The effect of introducing a _maximum allowed edit distance_: words in the dictionary for which the
-length difference to the misspelled word exceeds the maximum allowed edit distance can be skipped without a calculation, which increases the speed of the search.
-- The program also allows for an optional prioritisation of misspellings where a character has been replaced with a character on a neighbouring key on the keyboard (one of several possible typographical errors that might occur when typing on a keyboard.) This is achieved by assigning substitutions by a neighbouring key a lower edit cost than other substitutions when calculating Damerau-Levenshtein distances.
+When the user enters a word into the program, the word is searched for in the dictionary stored in the trie. If the word cannot be found, the word is assumed to be misspelled, and the program attempts to find one or more close matches in the dictionary to return as a suggested spellings. This process requires a metric for measuring the difference between two strings. The [Damerau-Levenshtein distance](https://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance) is such a metric, providing a value desicribing the smallest possible number of edit operations (*insertion*, *deletion*, *substitution* or *transposition of two adjacent characters*) needed to transform one string into another.
 
-## Wordlists used
+The Damerau-Levensthein distance between two strings is calculated using an extended version of the [Wagner-Fischer](https://en.wikipedia.org/wiki/Wagner%E2%80%93Fischer_algorithm) dynamic programming algorithm. The algorithm requires calculating the contents of a matrix with the dimensions (source word length) x (target word length), which means the algorithm has a time complexity of O(n x m). The application contains a functionality for calculating the Damerau-Levenshtein distance between two given strings. In addition to the edit distance value, the functionality also prints out the matrix resulting from the algorithm.
+
+The actual spell checker (and generator of suggested spellings) has two implementations in the application:
+
+- A *baseline version* with a for-loop. The entire word list is retrieved from the trie. The list is then iterated, while calculating the Damerau-Levenshtein distance to every word. As words with lower edit distances to the misspelled word are encountered, the maximum edit distance allowed is successively lowered, allowing for some words to be skipped without any calculations (Words with an absolute length difference to the misspelled word larger than the maximum edit distance allowed can be ignored. Even if the prefixes of the words are identical, inserting or deleting the remaining characters - each operation with an edit cost of 1 - would result in the edit distance value being higher than a closer match already found.)  
+
+The time complexity for this spell checker implementation is O(number of words in the dictionary x (maximum word length)^2).
+- A *recursive approach*: The Damerau-Levenshtein distances to the words in the dictionary are calculated recursively while traversing the trie. In this implementation the misspelling is set as the target word (represented by the columns in the matrix), and only one new row needs to be calculated per node/letter in the trie, while the previous rows are shared by all words with the same prefix, and can be reused.  
+As in the baseline version, the maximum allowed edit distance is succesively lowered as closer matches are found. This means entire branches of the trie can be skipped without calculation, if the smallesdt value in the current matrix row exceeds the maximum edit distance allowed.  
+
+The time complexity of the recursive implementation of the spell checker is O(maximum word length x number of nodes in the trie)
+
+Both spell checker implementations include the possibility for the user to set the maximum allowed edit distance beforehand. This speeds up the search for spelling suggestions if the automatic capping of the maximum edit distance takes effect slowly (i.e. the maximum allowed edit distance stays high for a long time).
+Both implementations also allow for an optional prioritisation of correctly spelled words where a character has been replaced in the misspelling with a character on a neighbouring key on the keyboard (one of several possible typographical errors that might occur when typing on a keyboard.) This priorisation is achieved by assigning substitutions by a neighbouring key a lower edit cost than other substitutions when calculating Damerau-Levenshtein distances.
+
+## Wordlist used:
 
 - List of English words: https://github.com/first20hours/google-10000-english ([License](https://github.com/first20hours/google-10000-english/blob/master/LICENSE.md))
-- [Wikipedia: List of common misspellings](https://en.wikipedia.org/wiki/Wikipedia:Lists_of_common_misspellings/For_machines) ([CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/))
+- [Wikipedia: List of common misspellings](https://en.wikipedia.org/wiki/Wikipedia:Lists_of_common_misspellings/For_machines) ([CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/))  
+
+A more extensive wordlist (ca 90 000 words) downloaded from [http://app.aspell.net/create](http://app.aspell.net/create) has been used for performance tests run locally. This list was not added to the repository.
 
 ## Sources
 
