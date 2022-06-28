@@ -32,11 +32,11 @@ The performance tester is started from the command line:
 poetry run invoke performance-test
 ```
 
-The tests can be run on a list of misspellings entered by the user, or by utilizing a list of random misspellings from the [Wikipedia list of common misspellings](https://en.wikipedia.org/wiki/Wikipedia:Lists_of_common_misspellings/For_machines) ([CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/))
+The tests can be run on a list of misspellings entered by the user, or by utilizing a randomly created list of misspelled words from the [Wikipedia list of common misspellings](https://en.wikipedia.org/wiki/Wikipedia:Lists_of_common_misspellings/For_machines) ([CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/)), which has been added to the repository.
 
-The [spelling error parser](../src/tests/spelling_error_parser.py), which creates the list of random spelling errors, only adds misspelled words to the list if their corresponding correct spellings exist in the used dictionary. Misspellings where the misspelled word and/or the correct spelling contain characters not in the used alphabet (as defined in [alphabet_utils](../src/services/alphabet_utils.py)) are also skipped.
+The [spelling error parser](../src/tests/spelling_error_parser.py), which creates the list of random spelling errors, only adds misspelled words to the list if their corresponding correct spellings exist in the used dictionary. Misspellings where the misspelled word and/or the correct spelling contain characters not in the used alphabet (as defined in [alphabet_utils.py](../src/services/alphabet_utils.py)) are also skipped.
 
-The desired length of the list of spelling errors can be set through the performance tester user interface, as well as the length of the misspelled words in the list.
+The desired length of the list of spelling errors can be set through the performance tester user interface, as well as the length of the misspelled words in the list. The user interface also allows for setting the maximum Damerau-Levenshtein edit distance allowed when running the tests, as well as prioritising substitutions by neighbouring keys,
 
 The test results are written as .csv-files to the test_results-directory in the project root.
 
@@ -45,16 +45,16 @@ The test results are written as .csv-files to the test_results-directory in the 
 The results for the performance tests reported below were obtained using a reference wordlist of correctly spelled English words downloaded from [http://app.aspell.net/create](http://app.aspell.net/create), created with the parameters:
 
 diacritic: strip  
-max_size: 60
-max_variant: 0
-special: hacker
+max_size: 60  
+max_variant: 0  
+special: hacker  
 spelling: US GBs GBz
 
 The words containing non-ASCII lowercase letters were removed. The resulting dictionary of English words contains **89 315 words**.
 
 ### Initial test results using the regular user interface
 
-Results obtained without prioritizing substitutions by neighbouring keys.
+(Results obtained without prioritizing substitutions by neighbouring keys.)
 
 **Misspelled word:** "zooom"  
 
@@ -66,7 +66,7 @@ Results obtained without prioritizing substitutions by neighbouring keys.
 | Algorithm | Result | Max edit distance | Time used (seconds) |
 | --- | --- | --- | --- |
 | Baseline (for-loop) | zoom(1) | 2 | 1.0738938050344586 |
-| Recursive | zoom(1) | 2 | False | 0.047685077879577875 |
+| Recursive | zoom(1) | 2 | 0.047685077879577875 |
 
 | Algorithm | Result | Max edit distance | Time used (seconds) |
 | --- | --- | --- | --- | 
@@ -93,7 +93,6 @@ Results obtained without prioritizing substitutions by neighbouring keys.
   
 ---
 **Misspelled word:** "asdfgh"  
-**Dictionary size:** 89 315 words. 
 
 | Algorithm | Result | Max edit distance | Time used (seconds) |
 | --- | --- | --- | --- | 
@@ -135,15 +134,17 @@ Tests below show the results of introducing one specific and quite limited heuri
 
 - **Accuracy of reference dictionary**. For the spell checking to be accurate, the reference dictionary has to be accurate too. (This naturally applies to all spell checkers). The wordlist used in the tests contains the somewhat obscure 'nickle', which means the misspelling of 'nickel' is not recognized.
 
-**Setting maximum edit distance** 
+#### Setting maximum edit distance
 
 Both the recursive and the baseline implementation benefit with regard to speed from setting the maximum Damerau-Levenshtein allowed beforehand, especially when the misspelled words are long. At the same time, capping the allowed edit distance too low may also lead to the algorithm discarding the actual intended spelling for being too far away, as can be seen in the results for the longer misspellings:
 
+**Longer misspellings:**
 ![Plot comparing spell checking times for longer words with and without max edit distance set](../documentation/images/plot_error_len_12_me_comparison.png)
 
+**Shorter misspellings:**
 ![Plot comparing spell checking times for shorter words with and without max edit distance set](../documentation/images/plot_error_len_6_me_comparison.png)
 
 
-**Prioritising neighbouring keys**
+#### Prioritising neighbouring keys
 
 (Work in progress)
