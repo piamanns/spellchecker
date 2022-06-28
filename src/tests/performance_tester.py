@@ -52,7 +52,7 @@ class PerformanceTester:
         """
 
         print("Running performance tests... (this might take a while!)\n", flush=True)
-
+      
         if not error_list or len(error_list) == 0:
             error_list = self.create_error_list(
                 self.default_error_word_len,
@@ -61,15 +61,16 @@ class PerformanceTester:
             )
 
         # Baseline:
-        results = self._run_speed_test(error_list)
+        results = self._run_speed_test(error_list, "baseline", max_edit, neighbour_prio)
         suffix = f"_{str(max_edit)}_{str(neighbour_prio)}"
         self._write(results, f"_baseline{suffix}")
  
         # Recursive:
-        results = self._run_speed_test(error_list, "recursive")
+        results = self._run_speed_test(error_list, "recursive", max_edit, neighbour_prio)
         self._write(results, f"_recursive{suffix}")
   
         print(f"\nSpelling errors used in tests: {' ' .join(error_list)}")
+        print(f"Params: max_edit: {max_edit}, neighbour_prio: {neighbour_prio}")
         print(f"Spelling error file: {SPELLING_ERRORS_FILENAME}")
         print(f"Dictionary used: {WORDLIST_FILENAME}")
         print(f"Dictionary size: {spellchecker_service.get_dictionary_size()} words\n")
@@ -121,7 +122,7 @@ class PerformanceTester:
                        max_edit=None, neighbour_prio=None):
         results = []
         for error in error_list:
-            search_time, result = self._run_search(error, search_type)
+            search_time, result = self._run_search(error, search_type, max_edit, neighbour_prio)
             success, correct_spelling = self._check_result(error, result)
             results.append([error, correct_spelling, search_time, result, success])
         return results
