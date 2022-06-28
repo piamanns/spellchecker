@@ -64,3 +64,8 @@ _misspelling;correct spelling(s);search duration;suggested spelling(s);correct s
 ```bash
 poetry run invoke lint
 ```
+
+## Credits
+
+- Inspired by [Steve Hanov's blog post](http://stevehanov.ca/blog/index.php?id=114) on utilizing the trie data structure for calculating (Levenshtein) edit distances recursively
+- The Wikipedia pseudocode for calculating true Damerau-Levensthein distance is excellently clarified in [James M. Jensen II´s blog post](https://web.archive.org/web/20180814145642/https://scarcitycomputing.blogspot.com/2013/04/damerau-levenshtein-edit-distance.html).

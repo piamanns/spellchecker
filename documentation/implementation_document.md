@@ -48,9 +48,13 @@ A more extensive wordlist (ca 90 000 words) downloaded from [http://app.aspell.n
 
 ## Sources
 
-- https://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance
-- https://web.archive.org/web/20180814145642/https://scarcitycomputing.blogspot.com/2013/04/damerau-levenshtein-edit-distance.html, copy on https://www.lemoda.net/text-fuzzy/damerau-levenshtein/index.html
-- http://stevehanov.ca/blog/index.php?id=114
-- https://en.wikipedia.org/wiki/Wagner%E2%80%93Fischer_algorithm
-- https://en.wikipedia.org/wiki/Trie
-- https://medium.com/smucs/trie-data-structure-fd2de3304e6e
+- [Wikipedia: Damerau-Levenshtein distance](https://en.wikipedia.org/wiki/Damerau%E2%80%93Levenshtein_distance)
+- [James M. Jensen II: Damerau-Levenshtein Edit Distance Explained](https://web.archive.org/web/20180814145642/https://scarcitycomputing.blogspot.com/2013/04/damerau-levenshtein-edit-distance.html), copy on https://www.lemoda.net/text-fuzzy/damerau-levenshtein/index.html
+- [Steve Hanov: Fast and Easy Levenshtein distance using a Trie](http://stevehanov.ca/blog/index.php?id=114)
+- [Wikipedia: Wagner-Fischer algorithm](https://en.wikipedia.org/wiki/Wagner%E2%80%93Fischer_algorithm)
+- [Wikipedia: Trie](https://en.wikipedia.org/wiki/Trie)
+- [Christopher Alvear: Trie Data Structure (Medium)](https://medium.com/smucs/trie-data-structure-fd2de3304e6e)
+
+**Interesting read on slightly different approach:**
+
+- [Peter Norvig: How to Write a Spelling Corrector](https://norvig.com/spell-correct.html)
