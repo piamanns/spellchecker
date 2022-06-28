@@ -141,10 +141,7 @@ class PerformanceTester:
  
     def _check_result(self, error: str, result: list):
         correct_spelling = []
-        if error not in self._error_dict:
-            # Intended spelling is unknown
-            correct_spelling = None
-        else:
+        if error in self._error_dict:
             correct_spelling = self._error_dict[error]
             for suggestion in result:
                 if suggestion.split("(")[0] in correct_spelling:
