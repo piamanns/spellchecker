@@ -1,4 +1,5 @@
 import unittest
+from time import perf_counter
 from services.spellchecker_service import SpellcheckerService
 
 
@@ -157,3 +158,35 @@ class TestSpellcheckerService(unittest.TestCase):
 
         result = self.sp_service.find_closest_match_recursively("endeavrour", 1)
         self.assertListEqual(result, [])
+    
+    def test_get_latest_search_time_returns_correct_value(self):
+        wordlist = ["art", "bale", "ball", "balm", "car", "carbon", "pass",
+                    "passport", "value", "water", "what", "whether"]
+        for word in wordlist:
+            self.sp_service.add_word(word)
+
+        start = perf_counter()
+        self.sp_service.find_closest_match_recursively("pass")
+        end = perf_counter()
+        self.assertAlmostEqual(start-end, self.sp_service.get_search_time(), places=3)
+    
+    def test_get_dictionary_size_returns_correct_value(self):
+        wordlist = ["art", "bale", "ball", "balm", "car", "carbon", "pass",
+                    "passport", "value", "water", "what", "whether"]
+        for word in wordlist:
+            self.sp_service.add_word(word)
+        
+        result = self.sp_service.get_dictionary_size()
+        
+        self.assertEqual(len(wordlist), result)
+
+    def test_get_info_returns_correct_string(self):
+        wordlist = ["art", "bale", "ball", "balm", "car", "carbon", "pass",
+                    "passport", "value", "water", "what", "whether"]
+        for word in wordlist:
+            self.sp_service.add_word(word)
+
+        self.sp_service.find_closest_match_recursively("whether")
+        ref_string = (f"\nSearch took {self.sp_service.get_search_time()} seconds."
+                     + f"\n({len(wordlist)} words in dictionary.)")
+        self.assertEqual(ref_string, self.sp_service.get_info())

@@ -17,7 +17,7 @@ The tests include checks for different kinds of edit operations resulting in cor
 
 The current overall branch coverage of the unit tests is 97%:
 
-![Picture of coverage report](./images/coverage-report_100622.png)
+![Picture of coverage report](./images/coverage-report_300622.png)
 
 ## Performance testing
 
