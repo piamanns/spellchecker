@@ -55,7 +55,7 @@ class PerformanceTester:
       
         if not error_list or len(error_list) == 0:
             error_list = self.create_error_list(
-                self.default_error_word_len,
+                None,
                 self.default_error_list_len,
                 False
             )
