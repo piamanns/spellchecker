@@ -56,7 +56,6 @@ def calculate_dl_distance_recursive(word_target: str, trie, max_dist=None, neigh
             matrix += [[big_cost] + list(range(len(word_target) + 1))]
             letter = calc_char(i)
 
-            #print("current max dist is: ", curr_max_dist)
             curr_max_dist = calculate(
                                 node, letter, "", word_target,
                                 1, matrix, rows_per_char, curr_max_dist,
@@ -104,8 +103,6 @@ def calculate(node, char_source, word_source, word_target,
 
     for col in range(2, cols):
         char_target = word_target[col-2]
-        #print("comparing ", char_source, " to ", char_target)
-        #print("source word is now", word_source+char_source)
 
         row_w_match = rows_per_char[calc_index(char_target)]
         col_w_match = col_per_char
@@ -174,7 +171,6 @@ def calculate_min(matrix, curr_row, prev_row_idx, col, cost, row_w_match, col_w_
                 + (prev_row_idx-row_w_match) + 1
                 + (col-col_w_match-1)
     )
-    #print(f"subst:{subst}, insert:{insert}, delete:{delete}, transp:{transp}")
     return min(subst, insert, delete, transp)
 
 def add_word_as_candidate(candidates, word, dl_distance):

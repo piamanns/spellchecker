@@ -174,7 +174,7 @@ class SpellcheckerService:
         """
 
         return self._latest_search_time
-    
+
     def get_dictionary_size(self):
         """Gets the size of the used dictionary.
 

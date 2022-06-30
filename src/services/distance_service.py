@@ -47,7 +47,6 @@ def calculate_dl_distance(word_a: str, word_b:str, neighbour_check=False, debug_
 
         for col in range(2, len(word_b) + 2):
             char_b = word_b[col-2]
-            #print(f"\nrow:{row}, col:{col}")
             row_w_match = rows_per_char[calc_index(char_b)]
             col_w_match = col_per_char
 
@@ -68,8 +67,6 @@ def calculate_dl_distance(word_a: str, word_b:str, neighbour_check=False, debug_
                       + (row-row_w_match-1) + 1
                       + (col-col_w_match-1)
             )
-            #minimum = calculate_min(matrix, row, col, cost, row_w_match, col_w_match)
-            #matrix[row][col] = minimum
 
         rows_per_char[calc_index(char_a)] = row
 

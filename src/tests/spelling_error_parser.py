@@ -73,7 +73,7 @@ class SpellingErrorParser:
             If collate_by_length is set to True, the values are lists of lists, where
             the index in the first list corresponds to the length of the misspellings
             contained in the list in that particular index.
-            If collate_by_lentgh is set to False, the values are lists containing 
+            If collate_by_length is set to False, the values are lists containing 
             all misspellings beginning with the letter indicated by the key.
         """
 
