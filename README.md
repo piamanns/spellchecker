@@ -12,10 +12,11 @@ A Python spelling checker and corrector. A course assignment for the Data Struct
 
 ## Documentation
 - [Project specification](/documentation/project_specification.md)
-- [Implementation](/documentation/implementation_document.md)
-- [Testing](/documentation/testing_document.md)
+- [Implementation document](/documentation/implementation_document.md)
+- [Testing document](/documentation/testing_document.md)
+- [Instructions for use](/documentation/instructions_for_use.md)
 
-## Wordlists used
+## Wordlists in repository
 - List of English words: https://github.com/first20hours/google-10000-english ([License](https://github.com/first20hours/google-10000-english/blob/master/LICENSE.md))
 - [Wikipedia: List of common misspellings](https://en.wikipedia.org/wiki/Wikipedia:Lists_of_common_misspellings/For_machines) ([CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/))
 
@@ -55,9 +56,6 @@ poetry run invoke coverage-report
 poetry run invoke performance-test
 ```
 The test results are written to the test_results-directory in the project root.  
-
-Row content in test result files:  
-_misspelling;correct spelling(s);search duration;suggested spelling(s);correct spelling among suggestions (True or False)_
 
 ### Check code quality with pylint:
 

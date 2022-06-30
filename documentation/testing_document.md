@@ -15,7 +15,7 @@ The tests include checks for different kinds of edit operations resulting in cor
 
 - The classes for the implementation of the trie data structure (Trie and Node) are tested with the class [TestTrie](../src/tests/trie_test.py). The tests assert e.g. that adding keys to and searching for keys in the trie work as expected.
 
-The current overall branch coverage of the unit tests is 97%:
+The overall branch coverage of the unit tests is 97%:
 
 ![Picture of coverage report](./images/coverage-report_300622.png)
 
@@ -32,9 +32,15 @@ The performance tester is started from the command line:
 poetry run invoke performance-test
 ```
 
-The tests can be run on a list of misspellings entered by the user, or by utilizing a randomly created list of misspelled words from the [Wikipedia list of common misspellings](https://en.wikipedia.org/wiki/Wikipedia:Lists_of_common_misspellings/For_machines) ([CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/)), which has been added to the repository.
+![Image of Performance Tester command line interface](./images/performance-test_cli.png)
 
-The [spelling error parser](../src/tests/spelling_error_parser.py), which creates the list of random spelling errors, only adds misspelled words to the list if their corresponding correct spellings exist in the used dictionary. Misspellings where the misspelled word and/or the correct spelling contain characters not in the used alphabet (as defined in [alphabet_utils.py](../src/services/alphabet_utils.py)) are also skipped.
+The tests can be run on a list of misspellings entered by the user, or by utilizing a randomly created list of misspelled words from the [Wikipedia list of common misspellings](https://en.wikipedia.org/wiki/Wikipedia:Lists_of_common_misspellings/For_machines) ([CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/)), which has been added to the repository.  
+The file containing the misspellings is located in the data directory. This file name is also configurable through the [.env-file](../.env) (SPELLING_ERRORS_FILENAME).  
+
+The [spelling error parser](../src/tests/spelling_error_parser.py) creates the list of random spelling errors. For the parser to work, **the syntax of the spelling error file must follow that of the Wikipedia list of misspellings**, that is, misspelling->intended (for example succeds->succeeds).  
+The parser only adds misspelled words to the misspelling list if their corresponding correct spellings exist in the used dictionary. Misspellings where the misspelled word and/or the correct spelling contain characters not in the used alphabet (as defined in [alphabet_utils.py](../src/services/alphabet_utils.py)) are also skipped.  
+
+A table containing some statistics on the distribution of available spelling errors over first letter and length can be printed by choosing the command 1 in the command line-interface.
 
 The desired length of the list of spelling errors can be set through the performance tester user interface, as well as the length of the misspelled words in the list. The user interface also allows for setting the maximum Damerau-Levenshtein edit distance allowed when running the tests, as well as prioritising substitutions by neighbouring keys,
 
