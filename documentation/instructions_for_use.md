@@ -44,9 +44,9 @@ Prints out the dictionary stored in the trie.
 **4 - Calculate Damerau-Levensthein distance**
 
 Calculates the true Damerau-Levenshtein distance between two given words.  
-The user can choose to prioritise suggestions of correctly spelled words, where a character has been substituted by a neighbouring key on the keyboard in the misspelling, by typing "y" when asked.  
+The user can choose to assign a lower edit cost for substitutions by a neighbouring key on the keyboard by typing "y" when asked.  
 
-The command also prints out the matrix resulting from the calculation, where the source word (the word entered first) is represented by the rows, and the target word (the word entered second) is represented by the columns:
+The command also prints out the matrix resulting from the calculation, where the _source_ word (the word entered first) is represented by the rows, and the _target_ word (the word entered second) is represented by the columns:
 
 ![Picture of the command line-interface after calculating the Damerau-Levenshtein distance bwetween two words.](./images/spellchecker_cli_dl-distance.png)
 
@@ -57,7 +57,7 @@ The maximum Damerau-Levenshtein distance allowed between the misspelled word and
 
 The optional prioritisation of neighbouring key substitutions is chosen by entering "y".  
 
-In addition to suggested correct spellings, the command also prints out some statistics on the time spent for searching and the size of the dictionary:
+In addition to suggested correct spellings, the command also prints out some statistics on the time used for searching and the size of the dictionary:
 
 ![Picture of the command line-interface after running a spellcheck using the baseline implementation.](./images/spellchecker_cli_baseline.png)
 
