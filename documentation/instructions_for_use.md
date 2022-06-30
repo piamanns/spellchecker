@@ -48,7 +48,7 @@ The user can choose to prioritise suggestions of correctly spelled words, where 
 
 The command also prints out the matrix resulting from the calculation, where the source word (the word entered first) is represented by the rows, and the target word (the word entered second) is represented by the columns:
 
-![Picture of the command line-interface after calculating the Damerau-Levenshtein distance bwetween two words.](./images/spellchecker_cli.png)
+![Picture of the command line-interface after calculating the Damerau-Levenshtein distance bwetween two words.](./images/spellchecker_cli_dl-distance.png)
 
 **5 - Check spelling (baseline for-loop)**
 
