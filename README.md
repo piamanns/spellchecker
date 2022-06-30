@@ -2,6 +2,8 @@
 
 A Python spelling checker and corrector. A course assignment for the Data Structures Project-course at the University of Helsinki.
 
+[Final version downloadable as a GitHub Release](https://github.com/piamanns/spellchecker/releases/tag/v1.0.0)
+
 ## Weekly progress reports
 - [Week 1](/documentation/weekly_report_1.md)
 - [Week 2](/documentation/weekly_report_2.md)
