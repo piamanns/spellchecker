@@ -66,7 +66,7 @@ def check_spelling(method: str):
     except ValueError:
         max_edit = None
 
-    neighbour_check = input_yes_no("Prioritize words with neighbouring keys? (y/n): ")
+    neighbour_check = input_yes_no("Prioritise words with neighbouring keys? (y/n): ")
 
     result = []
     if method == "recursive":

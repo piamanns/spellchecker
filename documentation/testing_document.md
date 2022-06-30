@@ -5,7 +5,7 @@
 The program has been automatically tested using the _unittest_ framework.
 
 - The app logic class SpellCheckerService.py is tested with the class [TestSpellcheckerService](../src/tests/spellchecker_service_test.py). This test class also includes tests for the module providing the recursive implementation of traversing the trie and calculating Damerau-Levenshtein distances on the fly (distance_service_recursive).  
-The tests cover all functionalities available through the application user interface, e.g. asserting that correct results are returned for both the baseline and recursive spell checker, both when entering misspelled and correctly spelled words, with or without a maximum edit distance set beforehand or neighbouring keys prioritized when searching for close match word suggestions.
+The tests cover all functionalities available through the application user interface, e.g. asserting that correct results are returned for both the baseline and recursive spell checker, both when entering misspelled and correctly spelled words, with or without a maximum edit distance set beforehand or neighbouring keys prioritised when searching for close match spelling suggestions.
 
 - The WordlistRepository class, handling the reading from and writing to the wordlist file on disk, is tested with the class [TestWordlistRepository](../src/tests/wordlist_repository_test.py). The tests utlize a separate wordlist, used for testing purposes only. The filename of the test wordlist is configured in the .env.test-file.  
 The tests assert that reading from and writing to the wordlist file works as expected, and that words containing characters not in the allowed alphabet (as defined in [alphabet_utils.py](../src/services/alphabet_utils.py)) are skipped.
@@ -25,7 +25,7 @@ The performance of the two spellchecker implementations (baseline and recursive)
 
 The dictionary used can be changed by changing the filename of the file containing the wordlist with correctly spelled words (WORDLIST_FILENAME) in the [.env-file](../.env). The wordlist file should be placed in the data directory and contain one word per row. Parameters and functions relating to the allowed alphabet can be changed in the [alphabet_utils.py](../src/services/alphabet_utils.py)-file.
 
-More extensive perfomance tests can be run using the [PerformanceTester](../src/tests/performance_tester.py) class.  
+ Perfomance tests on batches of spelling errors can be run using the [PerformanceTester](../src/tests/performance_tester.py) class and script.  
 The performance tester is started from the command line:
 
 ```bash
@@ -60,7 +60,7 @@ The words containing non-ASCII lowercase letters were removed. The resulting dic
 
 ### Initial test results using the regular user interface
 
-(Results obtained without prioritizing substitutions by neighbouring keys.)
+(Results obtained without prioritising substitutions by neighbouring keys.)
 
 **Misspelled word:** "zooom"  
 
@@ -107,8 +107,8 @@ The words containing non-ASCII lowercase letters were removed. The resulting dic
 
 | Algorithm | Result | Max edit distance | Time used (seconds) |
 | --- | --- | --- | --- | 
-| Baseline (for-loop) | adage(3), ash(3), asiago(3), assign(3), aweigh(3), sigh(3), singh(3), sough(3) | 3 | 2.63363699009642 |
-| Recursive | adage(3), ash(3), asiago(3), assign(3), aweigh(3), sigh(3), singh(3), sough(3) | 3 | 0.21872165193781257 |
+| Baseline (for-loop) | adage(3), ash(3), assign(3), aweigh(3), sigh(3), sough(3) | 3 | 2.63363699009642 |
+| Recursive | adage(3), ash(3), assign(3), aweigh(3), sigh(3), sough(3) | 3 | 0.21872165193781257 |
   
 ---  
 The recursive algorithm is clearly much faster than the baseline implementation of looping through every word in the wordlist and calculating the Damerau-Levenshtein distance to the each word separately.
@@ -120,7 +120,7 @@ The capping of the maximum edit distance allowed should on average have a bigger
 
 Two random list of 10 misspellings were generated from the [Wikipedia list of common misspellings](https://en.wikipedia.org/wiki/Wikipedia:Lists_of_common_misspellings/For_machines): one with misspelled words with a length of 6 characters (shorter misspellings), and the other with misspellings that have a length of 12 characters (longer misspellings). These lists of spelling errors are by no means representative for spelling errors in general, but the results give some pointers on the performance of the spell checker algorithms and the effect of the optional parameters.
 
-All words from both lists were spell checked using the [performance tester script](../src/tests/performance_tester.py). In the two first runs no maximum edit distance was set beforehand and substitutions by neighbouring keys were not prioritized:
+All words from both lists were spell checked using the [performance tester script](../src/tests/performance_tester.py). In the two first runs no maximum edit distance was set beforehand and substitutions by neighbouring keys were not prioritised:
 
 **Shorter misspellings:**
 ![Plot with results for misspellings of length 6](./images/plot_error_len_6_no_max_edit.png)
@@ -133,7 +133,8 @@ Equally as expected, the recursive approach is much faster than the baseline imp
 
 The graph showing the results of spell checking the shorter misspellings also exposes some of the weaknesses in the Spellchecker app:
 
-- **Lack of heuristic for prioritising the suggestions**. Some of the misspellings return a long list of suggested correct spellings, each with the same Damerau-Levenshtein distance to the misspelled words. Picking the most relevant suggestion would require for example knowledge of context or data on how frequently different words occur in English texts in general. (Based on intuitive notion of frequency, 'bedore' seems for example to be a more likely misspelling of the word 'before' than 'bedsore', but the algorithm has no way of picking one over the other.)
+- **Lack of heuristic for prioritising the suggestions**. Some of the misspellings return a long list of suggested correct spellings, each with the same Damerau-Levenshtein distance to the misspelled words. Picking the most relevant suggestion would require for example knowledge of context, or data on how frequently different words occur in English texts in general. (Based on intuitive notion of frequency, 'bedore' for example seems to be a more likely misspelling of the word 'before' than 'bedsore', but the algorithm has no way of picking one over the other.)  
+
 Tests below show the results of introducing one specific and quite limited heuristic, namely prioritising substitutions by neighbouring keys. 
 
 - **Poor accuracy when spelling error is not [typographical](https://en.wikipedia.org/wiki/Typographical_error)**. Some spelling errors are not caused by mechanical slips on a keyboard, but occur because the writer simply does not know how to spell the word, uses a similarly pronounced homonym by mistake, or makes a grammatical error, as for example in the case 'arised - arose'. In these cases the correct spelling might have a long Damerau-Levenshtein distance to the misspelling and is not suggested, since words with lower edit distance are found.
@@ -166,17 +167,18 @@ Substitutions by neighbouring keys seems not to be a prominent enough cause of s
 
 For the sake of comparison the same test was run on a list of 300 spelling errors randomly picked from a list of spelling errors collected from typewritten or terminal input by staff and students in the Department of Information Studies of Sheffield University in the 1980's, consisting mainly of keyboarding errors, and assumedly typed by persons with a good knowledge of English. (This list is part of the Birkbeck spelling error corpus, made available by the [Oxford Text Archive](https://ota.bodleian.ox.ac.uk/repository/xmlui/handle/20.500.12024/0643?show=full).). 
 
-The results for the Sheffield data were somewhat better with regard to accuracy, but prioritising neighbouring keys still led to a decline in the success rate, compared to the algorithm were all edit operations were assigned an equal weight:
+The results for the Sheffield data were somewhat better with regard to accuracy, but prioritising neighbouring keys still led to a decline in the success rate, compared to the algorithm were all edit operations were assigned an equal edit cost:
 
 | Heuristic | Mean suggestion count | Successes (correct word suggested) | Fails  | 
 | --- | --- | --- | --- |
 | None | 1.633333 | 292 | 8 |
 | Neighbouring key | 1.483333 | 270 | 30 |
 
-A closer look at the results revealed that the runs with activated neighbouring key priorisation did indeed return accurate (and fewer) suggestions for misspellings were such a substitution had taken place (nost->most, wouls->would), but at the same time, these successes were outnumbered by the cases where the neighbouring key priorisation led to failure to suggest the intended spelling for words where the typographical mistake was in fact an insertion, deletion and/or transposition. 
+A closer look at the results revealed that the runs with activated neighbouring key priorisation did indeed return accurate (and fewer) suggestions for misspellings were such a substitution had in fact occured (nost->most, wouls->would), but at the same time, these successes were outnumbered by the cases where the neighbouring key priorisation led to failure to suggest the intended spelling for words where the typographical mistake was an insertion, deletion and/or transposition. 
 
 To sum up: while prioritising substitutions by neighbouring keys is easy to implement in the algorithm for calculating Damerau-Levenshtein distance, the usefulness of such a priorisation alone seems quite limited.  
 
 
-**Reference:**
+**Reference:**  
+
 University of Oxford, Birkbeck spelling error corpus / Roger Mitton, Oxford Text Archive, http://hdl.handle.net/20.500.12024/0643.
