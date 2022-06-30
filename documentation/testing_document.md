@@ -147,4 +147,30 @@ Both the recursive and the baseline implementation benefit with regard to speed 
 
 #### Prioritising neighbouring keys
 
-(Work in progress)
+The optional possibility to prioritise substitutions by neighbouring keys on the keyboard by assigning these substitutions a lower edit cost than other edit operations, was tested on a longer list of misspellings. A list of 300 misspelled words was randomly generated from the Wikipedia list of common spelling errors. All words were then run through the recursive implementation of the spell checker, first without prioritising neighbouring keys and then with the neighbouring key prioritisation activated. The results were then checked for accuracy, that is, if the intended spelling was among the spellings suggested.
+
+The results were discouraging: while the mean number of suggested spellings decreased when prioritising neighbouring keys, so did also the success rate, in quite a significant way:
+
+| Heuristic | Mean suggestion count | Successes (correct word suggested) | Fails | 
+| --- | --- | --- | --- |
+| None | 1.856667 | 294 | 6 |
+| Neighbouring key | 1.456667 | 253 | 47 |
+
+Substitutions by neighbouring keys seems not to be a prominent enough cause of spelling errors in the Wikipedia material to be a particularly useful heuristic. 
+
+For the sake of comparison the same test was run on a list of 300 spelling errors randomly picked from a list of spelling errors collected from typewritten or terminal input by staff and students in the Department of Information Studies of Sheffield University in the 1980's, consisting mainly of keyboarding errors, and assumedly typed by persons with a good knowledge of English. (This list is part of the Birkbeck spelling error corpus, made available by the [Oxford Text Archive](https://ota.bodleian.ox.ac.uk/repository/xmlui/handle/20.500.12024/0643?show=full).). 
+
+The results for the Sheffield data were somewhat better with regard to accuracy, but prioritising neighbouring keys still led to a decline in the success rate, compared to the algorithm were all edit operations were assigned an equal weight:
+
+| Heuristic | Mean suggestion count | Successes (correct word suggested) | Fails  | 
+| --- | --- | --- | --- |
+| None | 1.633333 | 292 | 8 |
+| Neighbouring key | 1.483333 | 270 | 30 |
+
+A closer look at the results revealed that the runs with activated neighbouring key priorisation did indeed return accurate (and fewer) suggestions for misspellings were such a substitution had taken place (nost->most, wouls->would), but at the same time, these successes were outnumbered by the cases where the neighbouring key priorisation led to failure to suggest the intended spelling for words where the typographical mistake was in fact an insertion, deletion and/or transposition. 
+
+To sum up: while prioritising substitutions by neighbouring keys is easy to implement in the algorithm for calculating Damerau-Levenshtein distance, the usefulness of such a priorisation alone seems quite limited.  
+
+
+**Reference:**
+University of Oxford, Birkbeck spelling error corpus / Roger Mitton, Oxford Text Archive, http://hdl.handle.net/20.500.12024/0643.

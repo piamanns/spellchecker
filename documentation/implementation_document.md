@@ -37,14 +37,21 @@ The time complexity of the recursive implementation of the spell checker is O(ma
 
 Both spell checker implementations include the possibility for the user to **set the maximum allowed edit distance beforehand**. This speeds up the search for spelling suggestions if the automatic capping of the maximum edit distance takes effect slowly (i.e. the maximum allowed edit distance stays high for a long time).  
 
-Both implementations also allow for an optional prioritisation of correctly spelled words where a character has been replaced in the misspelling with a character on a **neighbouring key** on the keyboard (one of several possible typographical errors that might occur when typing on a keyboard.) This priorisation is achieved by assigning substitutions by a neighbouring key a lower edit cost than other substitutions when calculating Damerau-Levenshtein distances.
+Both implementations also allow for an optional prioritisation of correctly spelled words where a character has been replaced in the misspelling with a character on a **neighbouring key** on the keyboard (one of several possible typographical errors that might occur when typing on a keyboard.) This priorisation is achieved by assigning substitutions by a neighbouring key a lower edit cost than other edit operations when calculating Damerau-Levenshtein distances.
 
 ## Wordlist used:
 
 - List of English words: https://github.com/first20hours/google-10000-english ([License](https://github.com/first20hours/google-10000-english/blob/master/LICENSE.md))
 - [Wikipedia: List of common misspellings](https://en.wikipedia.org/wiki/Wikipedia:Lists_of_common_misspellings/For_machines) ([CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/))  
 
-A more extensive wordlist (ca 90 000 words) downloaded from [http://app.aspell.net/create](http://app.aspell.net/create) has been used for performance tests run locally. This list was not added to the repository.
+**Not added to repository:**
+
+- A more extensive wordlist (ca 90 000 words) downloaded from [http://app.aspell.net/create](http://app.aspell.net/create) has been used for performance tests run locally. 
+
+- The Sheffield data from the Birkbeck spelling error corpus, available through the [Oxford Text Archive](https://ota.bodleian.ox.ac.uk/repository/xmlui/handle/20.500.12024/0643?show=full) was also used for local testing. 
+
+Reference:
+University of Oxford, Birkbeck spelling error corpus / Roger Mitton, Oxford Text Archive, http://hdl.handle.net/20.500.12024/0643.
 
 ## Sources
 
@@ -55,6 +62,6 @@ A more extensive wordlist (ca 90 000 words) downloaded from [http://app.aspell.n
 - [Wikipedia: Trie](https://en.wikipedia.org/wiki/Trie)
 - [Christopher Alvear: Trie Data Structure (Medium)](https://medium.com/smucs/trie-data-structure-fd2de3304e6e)
 
-**Interesting read on slightly different approach:**
+**Interesting read on different approach:**
 
 - [Peter Norvig: How to Write a Spelling Corrector](https://norvig.com/spell-correct.html)
